@@ -28,6 +28,7 @@ def run_phase1_baseline() -> dict:
     rows = []
     valid = exact = review_correct = 0
     current_tp = current_fp = current_fn = 0
+    historical_tp = historical_fp = historical_fn = 0
 
     for case in cases:
         expected = case["expected"]
@@ -36,10 +37,15 @@ def run_phase1_baseline() -> dict:
             evidence = extract_evidence(Encounter.from_dict(case), extractor)
             valid += 1
             current = _action_pairs(evidence, TemporalScope.CURRENT_ENCOUNTER)
+            historical = _action_pairs(evidence, TemporalScope.HISTORICAL)
             expected_current = _pairs(expected["current_medication_actions"])
+            expected_historical = _pairs(expected["historical_medication_actions"])
             current_tp += len(current & expected_current)
             current_fp += len(current - expected_current)
             current_fn += len(expected_current - current)
+            historical_tp += len(historical & expected_historical)
+            historical_fp += len(historical - expected_historical)
+            historical_fn += len(expected_historical - historical)
             review = bool(evidence.review_reasons)
             review_ok = review == expected["requires_review"]
             review_correct += int(review_ok)
@@ -53,12 +59,20 @@ def run_phase1_baseline() -> dict:
             )
             case_exact = (
                 current == expected_current
+                and historical == expected_historical
                 and review_ok
                 and med_list == expected["medication_list_presence"]
                 and contradictions == expected["contradictions"]
             )
             exact += int(case_exact)
-            row.update({"status": "ok", "exact_match": case_exact})
+            row.update(
+                {
+                    "status": "ok",
+                    "exact_match": case_exact,
+                    "current_actions": sorted([list(x) for x in current]),
+                    "historical_actions": sorted([list(x) for x in historical]),
+                }
+            )
         except Exception as exc:
             row.update({"status": "error", "error": f"{type(exc).__name__}: {exc}"})
         rows.append(row)
@@ -74,6 +88,8 @@ def run_phase1_baseline() -> dict:
             "review_accuracy": _ratio(review_correct, count),
             "current_action_precision": _precision(current_tp, current_fp),
             "current_action_recall": _recall(current_tp, current_fn),
+            "historical_action_precision": _precision(historical_tp, historical_fp),
+            "historical_action_recall": _recall(historical_tp, historical_fn),
             "unsupported_current_actions": current_fp,
             "missed_current_actions": current_fn,
         },
