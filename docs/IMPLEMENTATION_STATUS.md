@@ -7,7 +7,7 @@
 - **Gate status:** **NOT SATISFIED**.
 - **Active phase issue:** GitHub Issue #1.
 - **Initial benchmark scope:** selected; see `docs/BILLING_SCOPE.md` and `docs/DECISIONS.md`.
-- **Initial provider scope:** PMHNP/NP and psychiatrist workflows selected under one shared core pathway unless verified rules require a distinction.
+- **Initial provider scope:** PMHNP/NP and psychiatrist are selected as distinct benchmark provider classes.
 - **Minimum v0.1 evidence schema:** defined in `docs/DATA_MODEL.md` and aligned with `docs/ARCHITECTURE.md`.
 - **Allowed work:** product/specification review, benchmark design, synthetic fixture organization, rule-source planning, and other Phase 0 work.
 - **Blocked work:** substantive Phase 1 runtime implementation, model integration, evidence-extractor implementation, rule-engine implementation, compiler/auditor implementation, payer overlays, and deferred integrations.
