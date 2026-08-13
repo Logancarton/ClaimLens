@@ -2,9 +2,15 @@
 
 ## Canonical signal flow
 
-`Encounter → Evidence Extraction → Structured Evidence → Rule Engine → Claim Compiler → Adversarial Audit → Payer Validation → Human Review`
+Full product direction:
 
-The same core signal flow supports both v0.1 workflow checkpoints: `PRE_SIGN` and `PRE_SUBMIT`. The checkpoint changes how findings are used, not how evidence or rules are interpreted.
+`Encounter → Evidence Extraction → Structured Evidence → Rule Engine → Claim Compiler → Adversarial Audit → Payer Validation when enabled → Human Review`
+
+For v0.1, payer validation is deferred. The required v0.1 signal path is:
+
+`Encounter → Evidence Extraction → Structured Evidence → Rule Engine → Claim Compiler → Adversarial Audit → Result → Human Review`
+
+The same core v0.1 signal flow supports both workflow checkpoints: `PRE_SIGN` and `PRE_SUBMIT`. The checkpoint changes how findings are used, not how evidence or rules are interpreted.
 
 ## Separation of responsibility
 
@@ -34,7 +40,7 @@ Independently challenges the candidate claim for unsupported assumptions, contra
 Material ambiguity, contradiction, unclear temporal scope, unresolved rule-source conflict, or unknown material applicability must remain a human-review condition rather than being silently collapsed to support.
 
 ### Payer layer
-Applies payer-specific overlays after the base rules are established. Payer behavior must not silently redefine the underlying clinical evidence.
+Applies payer-specific overlays after the base rules are established. It is deferred beyond the required v0.1 signal path and becomes active only when the payer-overlay phase is reached. Payer behavior must not silently redefine the underlying clinical evidence.
 
 ### Result layer
 Produces a human-readable and machine-readable result containing the candidate claim, support, uncertainty, warnings, workflow stage, and review status.
