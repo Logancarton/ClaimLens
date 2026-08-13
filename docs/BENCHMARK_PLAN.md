@@ -6,7 +6,7 @@ ClaimLens must be benchmarkable before it is trusted.
 
 A benchmark case contains:
 
-1. Synthetic encounter input.
+1. Synthetic encounter input, including provider class and workflow stage.
 2. Expected structured evidence.
 3. Expected rule evaluations.
 4. Expected candidate service state.
@@ -21,20 +21,27 @@ The benchmark uses the bounded outpatient psychiatric service scope selected in 
 
 The v0.1 benchmark covers PMHNP/NP and psychiatrist as distinct provider classes. Both classes must be represented in the test set, including matched cases where provider identity is the only intentional difference. Provider-specific differences require verified project rules.
 
+## Workflow coverage
+
+Both `PRE_SIGN` and `PRE_SUBMIT` stages must be represented. Matched cases should verify that the same underlying evidence/rules are interpreted consistently while stage-specific output behavior remains appropriate.
+
 ## Initial benchmark families
 
 - Clear supported encounter.
 - Clear unsupported encounter.
 - Missing required evidence.
-- Ambiguous wording.
-- Contradictory statements.
+- Ambiguous wording that must escalate when material.
+- Contradictory statements that must escalate when material.
 - Irrelevant documentation noise.
-- Copied-forward material that should not be treated as current evidence.
+- Historical/copied-forward material that should not silently be treated as current evidence.
+- Temporally unclear material that must escalate when material.
 - Medication started/stopped/continued/changed.
 - Psychotherapy present but incomplete.
 - Similar cases separated by one billing-relevant fact.
 - Cases designed to tempt overcoding.
 - Cases designed to expose under-detection of supported services.
+- Matched PMHNP/NP versus psychiatrist cases.
+- Matched pre-sign versus pre-submit cases.
 
 ## Core metrics
 
@@ -44,6 +51,7 @@ The v0.1 benchmark covers PMHNP/NP and psychiatrist as distinct provider classes
 - Hallucinated-evidence rate.
 - Ambiguity detection accuracy.
 - Provenance accuracy.
+- Temporal-scope accuracy.
 
 ### Rule / compiler layer
 - Candidate-service accuracy.
