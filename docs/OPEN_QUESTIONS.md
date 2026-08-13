@@ -24,9 +24,10 @@ These questions should be reviewed during Phase 0 because they may materially sh
 
 ### Evidence
 
-- What is the minimum evidence schema for the selected v0.1 benchmark service families?
 - How should copied-forward historical content be distinguished from current encounter evidence?
 - What confidence/ambiguity states should trigger mandatory human review?
+
+The minimum v0.1 evidence schema itself is now defined in `docs/DATA_MODEL.md`; the two questions above remain policy/behavior questions rather than missing schema fields.
 
 ## Later-phase questions
 
