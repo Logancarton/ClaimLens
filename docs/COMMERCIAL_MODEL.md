@@ -14,26 +14,24 @@ ClaimLens may create value by:
 - Reducing unsupported claims and audit exposure.
 - Reducing payer-specific rework/denials after payer overlays are added.
 
-## Potential initial buyers
+## Initial commercial target
 
-These remain hypotheses until validated:
+The first commercial validation target is an independent or small outpatient psychiatric practice, beginning with individual psychiatric clinicians/practice owners and small prescriber groups.
 
-- Individual psychiatric practices.
-- Multi-provider behavioral-health groups.
-- Billing/revenue-cycle companies.
-- Larger outpatient clinics.
-- Health systems after enterprise requirements are met.
+Larger behavioral-health groups are the next logical expansion target after the core workflow is demonstrated. Billing/revenue-cycle companies and health systems remain later targets because they introduce broader integration, governance, and enterprise requirements.
 
-## Possible delivery models
+## Delivery model
+
+ClaimLens is developed as software, with an optional AI-assisted, human-reviewed audit service as an early delivery and validation channel.
 
 ### Software
-Per-provider, per-encounter, or organizational subscription.
+The core product performs structured evidence review, rule evaluation, claim compilation, and audit. Future pricing may be per-provider, per-encounter, or organizational.
 
 ### AI-assisted audit service
-Customer provides an appropriately governed dataset/workflow; ClaimLens plus human validation produces an audit report. This may be a lower-friction path to early revenue and training/benchmark insight.
+For early validation, appropriately governed encounters may be reviewed through ClaimLens with human validation and returned as an audit result. This can provide commercial proof without redefining the software architecture.
 
-### Hybrid
-Software performs continuous review while expert services support onboarding, rule configuration, or periodic audit.
+### Combined operating model
+The service layer may help onboarding, validation, rule review, or periodic audits, but it must not become hidden manual logic that the software is falsely represented as performing autonomously.
 
 ## Commercial proof metrics
 
