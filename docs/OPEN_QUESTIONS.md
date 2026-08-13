@@ -12,11 +12,7 @@ None. Phase 0 decisions required for Gate 0 are resolved and recorded in `docs/D
 
 ## Phase 1 current question
 
-### Model runtime / transport
-
-- Which local runtime/transport should execute the selected `google/medgemma-1.5-4b-it` baseline: Transformers, Ollama, a llama.cpp-compatible path, or another explicitly approved mechanism?
-
-The model choice itself is resolved. Runtime selection is now material because it can introduce dependencies, model-access terms, deployment behavior, and external-service assumptions. Do not silently select one in implementation.
+None. The first model and runtime are selected: `google/medgemma-1.5-4b-it` through the local Ollama API. Remaining Phase 1 work is model-backed verification and baseline measurement.
 
 ## Later-phase questions
 
