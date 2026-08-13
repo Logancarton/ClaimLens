@@ -1,24 +1,45 @@
-"""ClaimLens runtime package.
+"""ClaimLens runtime package."""
 
-PURPOSE
-    Provide the canonical Python namespace for the ClaimLens product.
+from .encounter import Encounter, EncounterMetadata, PatientStatus, ProviderClass, WorkflowStage
+from .evidence import (
+    ConditionAddressed,
+    DataActivity,
+    DevelopmentPatternExtractor,
+    EvaluationManagementEvidence,
+    EvidenceExtractor,
+    EvidenceItem,
+    EvidenceState,
+    MedicationActivity,
+    PsychiatricEvaluationEvidence,
+    PsychotherapyEvidence,
+    SourceKind,
+    SourceProvenance,
+    StructuredEvidence,
+    TemporalScope,
+    extract_evidence,
+    validate_structured_evidence,
+)
 
-STATUS
-    Phase 0 structural blueprint only. No runtime implementation is approved yet.
-"""
-
-# =============================================================================
-# PACKAGE METADATA
-# =============================================================================
-
-# =============================================================================
-# PUBLIC EXPORTS
-# =============================================================================
-
-# =============================================================================
-# PACKAGE-LEVEL TYPE ALIASES
-# =============================================================================
-
-# =============================================================================
-# VERSION / BUILD IDENTIFIERS
-# =============================================================================
+__all__ = [
+    "ConditionAddressed",
+    "DataActivity",
+    "DevelopmentPatternExtractor",
+    "Encounter",
+    "EncounterMetadata",
+    "EvaluationManagementEvidence",
+    "EvidenceExtractor",
+    "EvidenceItem",
+    "EvidenceState",
+    "MedicationActivity",
+    "PatientStatus",
+    "ProviderClass",
+    "PsychiatricEvaluationEvidence",
+    "PsychotherapyEvidence",
+    "SourceKind",
+    "SourceProvenance",
+    "StructuredEvidence",
+    "TemporalScope",
+    "WorkflowStage",
+    "extract_evidence",
+    "validate_structured_evidence",
+]
