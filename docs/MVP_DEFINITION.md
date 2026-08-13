@@ -10,7 +10,9 @@ Given one synthetic outpatient psychiatric encounter, ClaimLens produces traceab
 
 ## v0.1 benchmark scope
 
-The selected benchmark scope is the bounded outpatient psychiatric service territory defined in `docs/BILLING_SCOPE.md`, which includes all three selected service families.
+The selected benchmark scope is the bounded outpatient psychiatric service territory defined in `docs/BILLING_SCOPE.md`, which includes all three selected service families and both PMHNP/NP and psychiatrist workflows.
+
+The two provider types share the same core ClaimLens pathway unless verified project rules require a provider-specific distinction.
 
 ## v0.1 is complete only when
 
