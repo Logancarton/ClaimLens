@@ -43,3 +43,9 @@ Reason: near-autonomous development should reduce repetitive supervision without
 Synthetic fixtures are organized as `data/development_cases/` and `data/evaluation_cases/`. Development cases may be tuned against. Frozen evaluation cases are independent benchmark evidence and must not silently become tuning data.
 
 Reason: separating data by purpose makes benchmark leakage harder and gives autonomous agents an unambiguous rule for fixture use.
+
+## 2026-08-13 — Initial benchmark includes all three outpatient psychiatric service families
+
+The v0.1 benchmark scope includes outpatient evaluation/management for psychiatric medication-management encounters, psychiatric diagnostic evaluation, and psychotherapy services/add-ons.
+
+These are treated as one bounded outpatient psychiatric benchmark territory rather than expanding ClaimLens into multiple specialties. The minimum evidence schema and source-verified rule logic for these families must still be frozen before Gate 0 can advance.
