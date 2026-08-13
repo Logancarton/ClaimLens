@@ -14,8 +14,26 @@ The source clinical encounter plus explicitly provided encounter metadata.
 ## Evidence
 A billing-relevant fact actually supported by the encounter.
 
+## Evidence State
+The record-level state of an evidence item: `PRESENT`, `ABSENT`, `AMBIGUOUS`, `CONTRADICTORY`, or `NOT_APPLICABLE`. Evidence state describes what the record supports; it is not a billing decision.
+
+## Temporal Scope
+Whether an evidence item belongs to the `CURRENT_ENCOUNTER`, is `HISTORICAL`, or is `UNCLEAR`. This represents timing without deciding how copied-forward content is detected.
+
 ## Provenance
 The location/source showing where an evidence item came from.
+
+## Data Activity
+An atomic documented data-review or data-analysis action captured as evidence. Rules decide how, or whether, it counts toward a billing requirement.
+
+## Evaluation/Management Evidence
+Structured facts relevant to outpatient E/M evaluation, including addressed problems, data activities, management activities, and documented practitioner time. It does not contain an E/M level decision.
+
+## Psychiatric Evaluation Evidence
+Structured facts documented during a psychiatric diagnostic evaluation, such as presenting reason, histories, mental status examination, diagnostic impression, and treatment plan.
+
+## Psychotherapy Evidence
+Structured facts showing whether psychotherapy occurred and documenting its time, intervention, target, participation/response, and other source-supported features.
 
 ## Rule
 A versioned billing/payer requirement represented outside the language model when deterministic expression is possible.
