@@ -49,3 +49,7 @@ Reason: separating data by purpose makes benchmark leakage harder and gives auto
 The v0.1 benchmark scope includes outpatient evaluation/management for psychiatric medication-management encounters, psychiatric diagnostic evaluation, and psychotherapy services/add-ons.
 
 These are treated as one bounded outpatient psychiatric benchmark territory rather than expanding ClaimLens into multiple specialties. The minimum evidence schema and source-verified rule logic for these families must still be frozen before Gate 0 can advance.
+
+## 2026-08-13 — v0.1 provider scope includes PMHNP/NP and psychiatrist workflows
+
+The initial benchmark includes both PMHNP/NP and psychiatrist workflows. ClaimLens should use one shared core pathway for both and introduce provider-specific branching only when verified project rules require a distinction.
