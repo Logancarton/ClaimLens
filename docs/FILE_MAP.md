@@ -39,8 +39,8 @@ Automated behavioral checks. See `tests/README.md`.
 ## `output/`
 Generated local results. Contents are ignored except `.gitkeep`.
 
-## `agent/`
-Project-specific architecture steward.
+## `.agents/`
+Project-specific AI guidance, including the architecture steward and reusable development skills.
 
-## `.agents/skills/`
-Reusable ClaimLens development workflow followed by AI coding tools.
+- `.agents/ARCHITECTURE_STEWARD.md` — protects product and architecture boundaries.
+- `.agents/skills/` — reusable ClaimLens development workflows followed by AI coding tools.
