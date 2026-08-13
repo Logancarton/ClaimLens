@@ -11,6 +11,9 @@ The subsystem that assembles candidate claim services from structured evidence a
 ## Encounter
 The source clinical encounter plus explicitly provided encounter metadata.
 
+## Provider Class
+The rendering-provider category preserved in encounter metadata for rule evaluation. In v0.1, PMHNP/NP and psychiatrist are distinct provider classes even when the applicable rules treat them identically.
+
 ## Evidence
 A billing-relevant fact actually supported by the encounter.
 
