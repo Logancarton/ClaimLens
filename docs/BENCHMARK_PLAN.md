@@ -19,7 +19,7 @@ The benchmark uses the bounded outpatient psychiatric service scope selected in 
 
 ## Provider coverage
 
-The v0.1 benchmark covers both PMHNP/NP and psychiatrist workflows using the shared pathway defined in `docs/BILLING_SCOPE.md`.
+The v0.1 benchmark covers PMHNP/NP and psychiatrist as distinct provider classes. Both classes must be represented in the test set, including matched cases where provider identity is the only intentional difference. Provider-specific differences require verified project rules.
 
 ## Initial benchmark families
 
