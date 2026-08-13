@@ -1,0 +1,34 @@
+# Secrets
+.env
+.env.*
+!.env.example
+
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+venv/
+
+# IDE / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Local databases / logs
+*.db
+*.sqlite
+*.sqlite3
+*.log
+
+# Generated output
+output/*
+!output/.gitkeep
+
+# NEVER COMMIT REAL PATIENT / PHI DATA
+# Synthetic and deliberately de-identified test fixtures may live in tracked folders.
+data/private/
+data/real_cases/
+data/phi/
+local_data/
