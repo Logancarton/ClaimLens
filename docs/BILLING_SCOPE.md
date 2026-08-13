@@ -6,9 +6,14 @@ Outpatient psychiatry / behavioral-health professional services, centered on psy
 
 ## Initial clinician types
 
-The v0.1 benchmark includes PMHNP/NP and psychiatrist workflows.
+The v0.1 benchmark uses two distinct provider classes:
 
-Both use the same core ClaimLens pathway. A separate provider branch is added only when a verified rule requires one.
+- PMHNP / nurse practitioner whose scope authorizes the psychiatric service being evaluated.
+- Psychiatrist.
+
+Both provider classes appear in benchmark cases. ClaimLens keeps the provider identity distinct even when an applicable rule reaches the same result for both.
+
+Any provider-specific supervision, collaboration, signature, enrollment, or billing condition must come from an authoritative rule for the relevant payer, jurisdiction, setting, and service. ClaimLens does not infer such a condition from provider title alone.
 
 ## Initial benchmark service families
 
