@@ -2,16 +2,18 @@
 
 This folder contains synthetic outpatient-psychiatry fixtures that may be inspected, edited, and tuned against during development.
 
-These cases are intentionally **evidence-focused rather than billing-gold cases** while ClaimLens remains in Phase 0. The exact first billing/service family and minimum evidence schema are still unresolved in `docs/OPEN_QUESTIONS.md`, so development fixtures here must not silently choose a code family, create billing rules, or define a runtime schema by convenience.
+Phase 1 uses these cases to test the frozen encounter-to-evidence contract in `docs/DATA_MODEL.md`. They remain **evidence-focused rather than billing-gold cases**: they must not create billing rules, assert candidate services, or silently become frozen evaluation data.
 
-Use the conceptual objects already defined in `docs/DATA_MODEL.md` when reviewing these cases: `ConditionAddressed`, `MedicationActivity`, `PsychotherapyEvidence`, provenance, uncertainty, and contradiction state. Treat the expected observations as design/test targets for evidence handling, not as executable billing policy.
-
-Current seed cases:
+Current human-readable seed cases:
 
 - `DEV-001-clear-current-medication-activity.md` — clear current condition and medication continuation.
 - `DEV-002-ambiguous-medication-change.md` — a discussed future change must not become a documented current dose change.
 - `DEV-003-contradictory-current-medication-plan.md` — conflicting current plan statements must remain contradictory.
 - `DEV-004-copied-forward-history-noise.md` — historical medication change must not be relabeled as current activity.
 - `DEV-005-medication-list-without-current-plan.md` — medication presence alone must not become current management activity.
+
+`phase1_baseline_cases.json` makes those same synthetic behaviors executable with explicit `PRE_SIGN`/`PRE_SUBMIT` workflow metadata and both PMHNP/NP and psychiatrist provider classes. It is development data and may be tuned against; it is not the frozen v0.1 evaluation set.
+
+Expected observations are test targets for evidence state, provenance, temporal scope, provider/workflow preservation, and review-preserving uncertainty. They are not executable billing policy.
 
 All content here is synthetic. Do not place real patient data, copied PHI, credentials, or proprietary payer material in this folder.
