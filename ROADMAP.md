@@ -9,6 +9,7 @@ Phase 0 converts the product idea into repository truth that implementation is n
 - [x] Product purpose, target setting, boundaries, and non-goals are defined in `docs/PRODUCT_SCOPE.md`, `docs/USE_CASES.md`, `docs/MVP_DEFINITION.md`, and `docs/PRODUCT_REQUIREMENTS.md`.
 - [x] The initial billing territory and rule-authority model are defined in `docs/BILLING_SCOPE.md` and `docs/RULE_GOVERNANCE.md`.
 - [x] The initial benchmark service scope is selected in `docs/BILLING_SCOPE.md` and recorded in `docs/DECISIONS.md`.
+- [x] The minimum v0.1 evidence schema for the selected benchmark scope is defined in `docs/DATA_MODEL.md` and aligned with `docs/ARCHITECTURE.md`.
 - [x] Core data objects and the canonical signal flow are defined in `docs/DATA_MODEL.md` and `docs/ARCHITECTURE.md`.
 - [x] Repository ownership, maintenance responsibilities, autonomous-work boundaries, and the development workflow are defined in `docs/FILE_MAP.md`, `AGENTS.md`, and `.agents/`.
 - [x] Development safety, PHI boundaries, secret handling, and the production-data stop boundary are defined in `docs/SECURITY_AND_DATA.md`.
@@ -17,7 +18,6 @@ Phase 0 converts the product idea into repository truth that implementation is n
 ### Remaining Gate 0 work
 
 - [ ] Complete the required human review of product scope and the v0.1 finish line.
-- [ ] Narrow and freeze the minimum evidence schema required across the selected benchmark service families.
 - [ ] Resolve any Phase 0 open question that becomes material to the selected v0.1 workflow.
 - [ ] Confirm that no unresolved architecture conflict blocks Phase 1.
 - [ ] Record any resulting decisions in `docs/DECISIONS.md`, synchronize affected project-truth files, and update `docs/IMPLEMENTATION_STATUS.md` only when Gate 0 evidence actually supports advancement.
