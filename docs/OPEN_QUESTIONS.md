@@ -18,10 +18,6 @@ These questions should be reviewed during Phase 0 because they may materially sh
 - Is ClaimLens first sold as software, an AI-assisted audit service, or both?
 - Does the first workflow run before note signing, before claim submission, or both?
 
-### Billing scope
-
-- Which provider types are in scope for version 1?
-
 ### Evidence
 
 - How should copied-forward historical content be distinguished from current encounter evidence?
