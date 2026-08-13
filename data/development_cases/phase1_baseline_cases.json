@@ -1,0 +1,32 @@
+[
+  {
+    "case_id": "DEV-001",
+    "metadata": {"encounter_id":"DEV-001","workflow_stage":"PRE_SIGN","provider_class":"PMHNP_NP","patient_status":"ESTABLISHED"},
+    "raw_note_text": "Anxiety has improved since the last visit. The patient is taking sertraline 50 mg daily and reports no medication side effects. Continue sertraline 50 mg daily. Follow up as scheduled.",
+    "expected": {"current_medication_actions":[["sertraline","continue"]],"historical_medication_actions":[],"requires_review":false,"medication_list_presence":0,"contradictions":0}
+  },
+  {
+    "case_id": "DEV-002",
+    "metadata": {"encounter_id":"DEV-002","workflow_stage":"PRE_SUBMIT","provider_class":"PSYCHIATRIST","patient_status":"ESTABLISHED"},
+    "raw_note_text": "Mood is mostly stable. Lamotrigine 100 mg daily appears on the current medication list. We discussed that the dose could be increased in the future if depressive symptoms return. For now, continue current medications.",
+    "expected": {"current_medication_actions":[],"historical_medication_actions":[],"requires_review":true,"medication_list_presence":0,"contradictions":0}
+  },
+  {
+    "case_id": "DEV-003",
+    "metadata": {"encounter_id":"DEV-003","workflow_stage":"PRE_SUBMIT","provider_class":"PMHNP_NP","patient_status":"ESTABLISHED"},
+    "raw_note_text": "Depression remains symptomatic. Assessment: continue fluoxetine 20 mg daily. The patient reports persistent nausea. Plan: stop fluoxetine because of nausea and reassess at follow-up.",
+    "expected": {"current_medication_actions":[["fluoxetine","continue"],["fluoxetine","stop"]],"historical_medication_actions":[],"requires_review":true,"medication_list_presence":0,"contradictions":1}
+  },
+  {
+    "case_id": "DEV-004",
+    "metadata": {"encounter_id":"DEV-004","workflow_stage":"PRE_SIGN","provider_class":"PSYCHIATRIST","patient_status":"ESTABLISHED"},
+    "raw_note_text": "Prior-visit history copied into today's note: aripiprazole was increased from 5 mg to 10 mg daily at the previous appointment because of persistent symptoms. Today: symptoms are stable and no new adverse effects are reported. Continue aripiprazole 10 mg daily without change.",
+    "expected": {"current_medication_actions":[["aripiprazole","continue"]],"historical_medication_actions":[["aripiprazole","increase"]],"requires_review":false,"medication_list_presence":0,"contradictions":0}
+  },
+  {
+    "case_id": "DEV-005",
+    "metadata": {"encounter_id":"DEV-005","workflow_stage":"PRE_SIGN","provider_class":"PMHNP_NP","patient_status":"ESTABLISHED"},
+    "raw_note_text": "Depression and low motivation were discussed. Current medication list: bupropion XL 150 mg daily. The remainder of the note discusses sleep routine and work stress. No medication plan is documented.",
+    "expected": {"current_medication_actions":[],"historical_medication_actions":[],"requires_review":false,"medication_list_presence":1,"contradictions":0}
+  }
+]
