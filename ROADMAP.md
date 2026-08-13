@@ -2,13 +2,29 @@
 
 ## Phase 0 — Define and freeze the product
 
-- Define product scope and non-goals.
-- Define billing scope.
-- Define data objects and signal flow.
-- Define repository ownership and development workflow.
-- Define safety and PHI handling rules.
+Phase 0 converts the product idea into repository truth that implementation is not allowed to silently redefine.
 
-Success: a new contributor can explain ClaimLens, its boundaries, and its first measurable target without reading implementation code.
+### Defined in repository truth
+
+- [x] Product purpose, target setting, boundaries, and non-goals are defined in `docs/PRODUCT_SCOPE.md`, `docs/USE_CASES.md`, `docs/MVP_DEFINITION.md`, and `docs/PRODUCT_REQUIREMENTS.md`.
+- [x] The initial billing territory and rule-authority model are defined in `docs/BILLING_SCOPE.md` and `docs/RULE_GOVERNANCE.md`.
+- [x] Core data objects and the canonical signal flow are defined in `docs/DATA_MODEL.md` and `docs/ARCHITECTURE.md`.
+- [x] Repository ownership, maintenance responsibilities, autonomous-work boundaries, and the development workflow are defined in `docs/FILE_MAP.md`, `AGENTS.md`, and `.agents/`.
+- [x] Development safety, PHI boundaries, secret handling, and the production-data stop boundary are defined in `docs/SECURITY_AND_DATA.md`.
+- [x] The initial benchmark structure and evaluation discipline are defined in `docs/BENCHMARK_PLAN.md`.
+
+### Remaining Gate 0 work
+
+- [ ] Complete the required human review of product scope and the v0.1 finish line.
+- [ ] Select the exact first billing/service family for the benchmark rather than leaving multiple candidate families in scope.
+- [ ] Narrow and freeze the minimum evidence schema required for that selected service family.
+- [ ] Resolve any Phase 0 open question that becomes material to the selected v0.1 workflow.
+- [ ] Confirm that no unresolved architecture conflict blocks Phase 1.
+- [ ] Record any resulting decisions in `docs/DECISIONS.md`, synchronize affected project-truth files, and update `docs/IMPLEMENTATION_STATUS.md` only when Gate 0 evidence actually supports advancement.
+
+Success: a new contributor can explain ClaimLens, its boundaries, its canonical signal flow, and its first measurable target without reading implementation code, and `docs/RELEASE_GATES.md` Gate 0 is satisfied.
+
+Phase 1 remains blocked until `docs/IMPLEMENTATION_STATUS.md` records Gate 0 as satisfied.
 
 ## Phase 1 — Evidence extraction
 
