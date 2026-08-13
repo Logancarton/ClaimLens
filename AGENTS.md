@@ -14,7 +14,7 @@ Before architecture or implementation work, read:
 5. `docs/DATA_MODEL.md`
 6. `docs/IMPLEMENTATION_STATUS.md`
 7. `docs/DECISIONS.md`
-8. `agent/ARCHITECTURE_STEWARD.md`
+8. `.agents/ARCHITECTURE_STEWARD.md`
 9. `.agents/skills/claimlens-development-workflow/SKILL.md`
 
 ## Non-negotiable rules
