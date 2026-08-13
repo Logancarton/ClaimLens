@@ -19,6 +19,8 @@ This folder is the project truth layer. Read documents in this order before majo
 15. `IMPLEMENTATION_STATUS.md` — what is actually built and verified.
 16. `DECISIONS.md` — settled architectural/product decisions.
 17. `OPEN_QUESTIONS.md` — unresolved questions that must not be silently assumed.
-18. `FILE_MAP.md` — where each type of work belongs.
+18. `FILE_MAP.md` — master maintenance key: where work belongs, what each file means, and which companion files must be checked/updated when something changes.
+
+Use `FILE_MAP.md` during implementation and again before completion. Its change matrix is the authoritative guide for identifying the materially affected file set that must be synchronized.
 
 When documents conflict, stop and resolve the conflict in `DECISIONS.md` before implementing around it.

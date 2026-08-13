@@ -11,13 +11,14 @@ Before architecture, implementation, debugging, or autonomous continuation work:
 
 1. Read `README.md`.
 2. Read `docs/INDEX.md` and follow the project-truth reading order relevant to the task.
-3. Re-check `docs/IMPLEMENTATION_STATUS.md` for the current phase, gate, and actual component maturity.
-4. Re-check `docs/OPEN_QUESTIONS.md` for unresolved items relevant to the current phase.
-5. Re-check `docs/RELEASE_GATES.md` before starting work that could advance a phase.
-6. Read `docs/DECISIONS.md` so settled decisions are not reopened silently.
-7. Read `.agents/AUTONOMY_POLICY.md` before selecting work without direct human instruction.
-8. Read `.agents/ARCHITECTURE_STEWARD.md`.
-9. Follow `.agents/skills/claimlens-development-workflow/SKILL.md`.
+3. Read `docs/FILE_MAP.md` as the maintenance key for ownership, dependencies, and end-of-task synchronization.
+4. Re-check `docs/IMPLEMENTATION_STATUS.md` for the current phase, gate, and actual component maturity.
+5. Re-check `docs/OPEN_QUESTIONS.md` for unresolved items relevant to the current phase.
+6. Re-check `docs/RELEASE_GATES.md` before starting work that could advance a phase.
+7. Read `docs/DECISIONS.md` so settled decisions are not reopened silently.
+8. Read `.agents/AUTONOMY_POLICY.md` before selecting work without direct human instruction.
+9. Read `.agents/ARCHITECTURE_STEWARD.md`.
+10. Follow `.agents/skills/claimlens-development-workflow/SKILL.md`.
 
 ## Non-negotiable rules
 
@@ -38,7 +39,7 @@ Before architecture, implementation, debugging, or autonomous continuation work:
 
 ## Completion synchronization rule
 
-At the end of every command/task, perform a repository-wide affected-file sweep before declaring completion.
+At the end of every command/task, use the change matrix in `docs/FILE_MAP.md` to identify the materially affected file set, then perform a repository-wide affected-file sweep before declaring completion.
 
 Synchronize every file materially affected by the change, including when applicable:
 
@@ -53,12 +54,12 @@ Synchronize every file materially affected by the change, including when applica
 - GitHub issue/PR text or checklist state when the task is tracked there.
 - Agent/skill instructions when workflow or repository structure changed.
 
-Before finishing, search the repository for old names, paths, interfaces, or assumptions touched by the task and update any stale references. Review the final diff/status and confirm that no affected companion file was omitted.
+Before finishing, search the repository for old names, paths, interfaces, or assumptions touched by the task and update any stale references. Review the final diff/status and confirm that no affected companion file identified by `docs/FILE_MAP.md` was omitted.
 
 "All files" means all files materially affected by the command. Do not create meaningless churn in unrelated files merely to change timestamps or wording.
 
 ## Work order
 
-Resolve current phase/gate → select an eligible unblocked issue → inspect → identify owner → define expected behavior → establish baseline/test → implement smallest systemic change → run focused tests → run broader verification → review for drift → synchronize every affected repository file → search for stale references → review final diff/status → update tracked issue/PR state if applicable → commit/push only coherent verified work.
+Resolve current phase/gate → select an eligible unblocked issue → inspect → identify owner → consult `docs/FILE_MAP.md` for affected companions → define expected behavior → establish baseline/test → implement smallest systemic change → run focused tests → run broader verification → review for drift → synchronize every affected repository file → search for stale references → review final diff/status → update tracked issue/PR state if applicable → commit/push only coherent verified work.
 
 If no eligible work remains in the current phase, stop and report the exact blocker. Do not substitute work from a later phase.

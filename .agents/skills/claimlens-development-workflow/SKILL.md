@@ -6,12 +6,12 @@ Use this workflow for implementation, debugging, architecture review, testing, a
 
 ## Start from project truth
 
-Read the canonical project documents listed in `AGENTS.md`. Do not infer architecture from filenames alone.
+Read the canonical project documents listed in `AGENTS.md`. Do not infer architecture from filenames alone. Use `docs/FILE_MAP.md` as the maintenance key for deciding where work belongs and which companion files must be checked when something changes.
 
 ## Workflow
 
 ### 0. Resolve work state
-Before selecting or continuing work, read `docs/IMPLEMENTATION_STATUS.md`, `docs/RELEASE_GATES.md`, `docs/OPEN_QUESTIONS.md`, and `.agents/AUTONOMY_POLICY.md`.
+Before selecting or continuing work, read `docs/IMPLEMENTATION_STATUS.md`, `docs/RELEASE_GATES.md`, `docs/OPEN_QUESTIONS.md`, `.agents/AUTONOMY_POLICY.md`, and the relevant portion of `docs/FILE_MAP.md`.
 
 Confirm:
 
@@ -19,6 +19,7 @@ Confirm:
 - Whether the requested/open issue belongs to that phase.
 - Whether an unresolved human-decision blocker prevents work.
 - Whether the change is authorized by settled project truth.
+- Which files `docs/FILE_MAP.md` says must be checked if this category of change is made.
 
 If no eligible task exists, stop and report the blocker instead of starting later-phase work.
 
@@ -26,7 +27,7 @@ If no eligible task exists, stop and report the blocker instead of starting late
 Translate the request into one observable behavior or repository outcome.
 
 ### 2. Identify ownership
-Locate the component that owns the behavior according to `docs/ARCHITECTURE.md`. Do not patch neighboring layers to avoid fixing the owner.
+Locate the component that owns the behavior according to `docs/ARCHITECTURE.md` and `docs/FILE_MAP.md`. Do not patch neighboring layers to avoid fixing the owner.
 
 ### 3. Establish the baseline
 Use an existing test or create the smallest known-answer synthetic case that exposes the current behavior.
@@ -54,7 +55,7 @@ Before completion ask:
 - Did we silently answer an open question or cross a release gate?
 
 ### 9. Synchronize all affected files
-A task is not complete when only the primary implementation file is correct. Update every repository file whose truth, path, interface, example, test expectation, or project state is materially affected by the change.
+A task is not complete when only the primary implementation file is correct. Use the change matrix in `docs/FILE_MAP.md` to identify the affected set, then update every repository file whose truth, path, interface, example, test expectation, or project state is materially affected by the change.
 
 Check and update, when applicable:
 
@@ -69,7 +70,7 @@ Check and update, when applicable:
 - GitHub issue/PR body or checklist state for tracked work.
 - Agent/skill instructions when repository structure or workflow changed.
 
-Do not touch unrelated files merely to create churn. "All files" means all files materially affected by the command.
+If `docs/FILE_MAP.md` identifies a companion file and it is intentionally not modified, verify that its existing content is still accurate. Do not touch unrelated files merely to create churn. "All files" means all files materially affected by the command.
 
 ### 10. Search for stale references
 Search the repository for names, paths, interfaces, terminology, or assumptions changed by the task. Fix stale references before completion.
@@ -87,6 +88,7 @@ Review the complete diff/status, not only the file you intended to edit.
 
 Confirm:
 
+- The applicable `docs/FILE_MAP.md` change-matrix row was followed.
 - Every affected companion file is synchronized.
 - Tests/verification reflect the final state.
 - No stale references remain.
