@@ -8,7 +8,7 @@ Required:
 
 - Product scope reviewed.
 - MVP finish line reviewed.
-- Initial billing/service family selected.
+- Initial billing/service benchmark scope selected.
 - Evidence schema questions narrowed enough for Phase 1.
 - No unresolved architecture conflict blocking implementation.
 
