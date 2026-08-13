@@ -2,46 +2,45 @@
 
 ## Root
 
-- `README.md` — what ClaimLens is.
-- `ROADMAP.md` — development sequence and success gates.
-- `AGENTS.md` — rules for AI coding/review agents.
-- `requirements.txt` — Python dependencies once dependencies are earned.
-- `.env.example` — names of required environment variables, never real secrets.
-- `.gitignore` — files/data that must remain local.
+- `README.md` — one-page identity and core signal flow.
+- `ROADMAP.md` — build order and success gates.
+- `AGENTS.md` — instructions for AI coding/review agents.
+- `requirements.txt` — Python dependencies once they are actually needed.
+- `.env.example` — environment-variable names only, never secrets.
+- `.gitignore` — source-control exclusions and PHI guardrails.
 
 ## `docs/`
-Project truth: scope, architecture, billing boundary, data model, decisions, and implementation status.
+The project truth layer. Start with `docs/INDEX.md`.
 
-## `src/claim_compiler/`
-Runtime implementation.
+## `src/claimlens/`
+Runtime implementation owned by the ClaimLens product namespace.
 
-- `main.py` — thin entry point / sequencing.
+- `main.py` — thin entry point and sequencing only.
 - `encounter.py` — encounter input ownership.
-- `evidence.py` — structured evidence extraction.
+- `evidence.py` — structured evidence extraction interface.
 - `rules.py` — rule evaluation interface.
 - `compiler.py` — candidate claim construction.
 - `auditor.py` — adversarial review.
 - `payer.py` — payer-specific overlays.
-- `result.py` — final result objects/presentation.
+- `result.py` — final result structures/presentation.
 
 ## `rules/`
-Human-reviewable versioned rule definitions grouped by source/jurisdiction.
+Single source-control home for human-reviewable executable billing-rule definitions. See `rules/README.md` and `docs/RULE_GOVERNANCE.md`.
 
 ## `prompts/`
-Model instructions. Prompts interpret information; they are not authoritative billing rules.
+Versioned model instructions. Prompts interpret information; they are not authoritative billing rules.
 
 ## `data/`
-- `synthetic_cases/` — generated/fake development encounters.
-- `test_cases/` — known-answer benchmark fixtures.
-- `payer_rules/` — structured payer data when needed.
-
-Never store real patient/PHI data here.
+Synthetic development cases and known-answer test fixtures only. See `data/README.md`.
 
 ## `tests/`
-Automated behavioral checks corresponding to runtime components.
+Automated behavioral checks. See `tests/README.md`.
 
 ## `output/`
-Generated local results. Contents should not be committed.
+Generated local results. Contents are ignored except `.gitkeep`.
 
-## `agent/` and `.agents/skills/`
-Project-specific architecture steward plus the reusable development workflow followed by AI coding tools.
+## `agent/`
+Project-specific architecture steward.
+
+## `.agents/skills/`
+Reusable ClaimLens development workflow followed by AI coding tools.

@@ -21,3 +21,11 @@ Insurance-card/ID extraction, payer resolution, network matching, and live eligi
 ## 2026-08-12 — No real patient data in Git
 
 Real patient/PHI data must never be committed to this repository. Synthetic or deliberately de-identified fixtures are used for development and benchmarking.
+
+## 2026-08-12 — Runtime package uses the ClaimLens name
+
+The Python package is `src/claimlens/`, not `src/claim_compiler/`. “Claim compiler” describes one subsystem; ClaimLens is the product/runtime namespace.
+
+## 2026-08-12 — `rules/` is the single rule home
+
+Billing/payer rules live under `rules/`. `data/` is reserved for synthetic development cases and known-answer test fixtures. This prevents two competing rule sources of truth.
