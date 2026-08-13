@@ -48,8 +48,34 @@ Reason: separating data by purpose makes benchmark leakage harder and gives auto
 
 The v0.1 benchmark scope includes outpatient evaluation/management for psychiatric medication-management encounters, psychiatric diagnostic evaluation, and psychotherapy services/add-ons.
 
-These are treated as one bounded outpatient psychiatric benchmark territory rather than expanding ClaimLens into multiple specialties. The minimum evidence schema and source-verified rule logic for these families must still be frozen before Gate 0 can advance.
+These are treated as one bounded outpatient psychiatric benchmark territory rather than expanding ClaimLens into multiple specialties.
 
 ## 2026-08-13 — PMHNP/NP and psychiatrist are distinct v0.1 provider classes
 
 The benchmark includes both provider classes and preserves their identity separately. Shared behavior may use the same rule path, while any provider-specific difference must be backed by an authoritative source before ClaimLens treats it differently.
+
+## 2026-08-13 — Initial commercial target is independent/small psychiatric practice
+
+The first commercial validation target is an individual outpatient psychiatric clinician/practice owner or small psychiatric prescriber practice. Larger groups may follow after the core workflow is demonstrated; billing companies and health systems remain later expansion targets.
+
+## 2026-08-13 — Delivery model is software plus optional human-reviewed audit service
+
+ClaimLens is developed as software. An AI-assisted, human-reviewed audit service may be used as an early validation/delivery channel, but manual service work must not be misrepresented as autonomous software behavior.
+
+## 2026-08-13 — v0.1 supports both pre-sign and pre-submit review
+
+The same core engine supports `PRE_SIGN` and `PRE_SUBMIT` checkpoints. Pre-sign review surfaces gaps while the clinician controls the note without inventing documentation. Pre-submit review evaluates the finalized record as-is before claim submission.
+
+## 2026-08-13 — Historical/copied-forward material does not silently become current evidence
+
+Repetition alone is insufficient to treat historical/copied-forward material as current-encounter evidence. Explicit current reassessment/reaffirmation/action can support current temporal scope. When timing is materially unclear, ClaimLens preserves `UNCLEAR` and escalates the dependent result to human review.
+
+## 2026-08-13 — Material unresolved uncertainty requires human review
+
+Material `AMBIGUOUS` or `CONTRADICTORY` evidence, material `UNCLEAR` temporal scope, unresolved rule-source conflict, or unknown material applicability resolves to `REVIEW`. Explicitly absent required support may resolve deterministically to `UNSUPPORTED`; absence does not automatically require review.
+
+## 2026-08-13 — Phase 0 specification approved and Gate 0 may advance
+
+The product scope and v0.1 MVP finish line are approved. The canonical architecture, rule-governance expectations, benchmark design, and development PHI/security boundary were reviewed and remain consistent with the selected service/provider/workflow scope. No unresolved architecture conflict blocks Phase 1.
+
+The human owner explicitly requested completion of the Phase 0 freeze. With the Gate 0 criteria satisfied, `docs/IMPLEMENTATION_STATUS.md` may advance to Phase 1 / Gate 1. Later-phase questions remain unresolved unless separately decided.
