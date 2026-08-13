@@ -33,9 +33,32 @@ Before architecture, implementation, debugging, or autonomous continuation work:
 - GitHub issues are a work queue, not permission to skip the current release gate.
 - Never silently resolve an item in `docs/OPEN_QUESTIONS.md` through implementation.
 - Update implementation status and decisions only when repository evidence or an explicit human decision justifies the change.
+- A task is not complete until every materially affected repository file has been synchronized.
+- Never leave stale paths, names, examples, comments, tests, fixtures, documentation, issue text, or project-truth references that contradict the completed change.
+
+## Completion synchronization rule
+
+At the end of every command/task, perform a repository-wide affected-file sweep before declaring completion.
+
+Synchronize every file materially affected by the change, including when applicable:
+
+- Runtime/source files.
+- Tests and test helpers.
+- Development and evaluation fixtures.
+- Prompts and rule definitions.
+- README/file maps and architecture/data-model documentation.
+- `docs/IMPLEMENTATION_STATUS.md`.
+- `docs/DECISIONS.md` and `docs/OPEN_QUESTIONS.md` when the work changes or resolves their content.
+- Release-gate, benchmark, security, or scope documents when their truth changed.
+- GitHub issue/PR text or checklist state when the task is tracked there.
+- Agent/skill instructions when workflow or repository structure changed.
+
+Before finishing, search the repository for old names, paths, interfaces, or assumptions touched by the task and update any stale references. Review the final diff/status and confirm that no affected companion file was omitted.
+
+"All files" means all files materially affected by the command. Do not create meaningless churn in unrelated files merely to change timestamps or wording.
 
 ## Work order
 
-Resolve current phase/gate → select an eligible unblocked issue → inspect → identify owner → define expected behavior → establish baseline/test → implement smallest systemic change → run focused tests → run broader verification → review diff → update project truth → commit/push only coherent verified work.
+Resolve current phase/gate → select an eligible unblocked issue → inspect → identify owner → define expected behavior → establish baseline/test → implement smallest systemic change → run focused tests → run broader verification → review for drift → synchronize every affected repository file → search for stale references → review final diff/status → update tracked issue/PR state if applicable → commit/push only coherent verified work.
 
 If no eligible work remains in the current phase, stop and report the exact blocker. Do not substitute work from a later phase.

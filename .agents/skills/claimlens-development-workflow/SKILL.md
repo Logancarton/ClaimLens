@@ -53,11 +53,48 @@ Before completion ask:
 - Did any real patient/PHI data, credentials, or secrets enter the repository?
 - Did we silently answer an open question or cross a release gate?
 
-### 9. Synchronize project truth
-Update `docs/IMPLEMENTATION_STATUS.md` only when evidence justifies a new status or work-state change. Add architecture/product decisions to `docs/DECISIONS.md` only when explicitly settled. Preserve unresolved items in `docs/OPEN_QUESTIONS.md`.
+### 9. Synchronize all affected files
+A task is not complete when only the primary implementation file is correct. Update every repository file whose truth, path, interface, example, test expectation, or project state is materially affected by the change.
 
-### 10. Finish cleanly
-Review diff/status. Commit only coherent verified work with a descriptive message.
+Check and update, when applicable:
+
+- Runtime/source files.
+- Tests and test helpers.
+- Development/evaluation fixtures.
+- Prompts and rules.
+- README, file maps, architecture, data model, terminology, scope, benchmark, security, and release-gate documentation.
+- `docs/IMPLEMENTATION_STATUS.md` when status/work state changed.
+- `docs/DECISIONS.md` only for explicitly settled decisions.
+- `docs/OPEN_QUESTIONS.md` when an open question was explicitly resolved or a new blocker was discovered.
+- GitHub issue/PR body or checklist state for tracked work.
+- Agent/skill instructions when repository structure or workflow changed.
+
+Do not touch unrelated files merely to create churn. "All files" means all files materially affected by the command.
+
+### 10. Search for stale references
+Search the repository for names, paths, interfaces, terminology, or assumptions changed by the task. Fix stale references before completion.
+
+Examples include:
+
+- Renamed files/directories still referenced in docs.
+- Old class/function/interface names in tests or examples.
+- A status document still saying Not Started after verified implementation.
+- A GitHub issue checklist that no longer reflects completed work.
+- A benchmark or fixture path that points to a previous folder name.
+
+### 11. Final repository review
+Review the complete diff/status, not only the file you intended to edit.
+
+Confirm:
+
+- Every affected companion file is synchronized.
+- Tests/verification reflect the final state.
+- No stale references remain.
+- No unrelated changes were accidentally included.
+- Project truth and tracked issue/PR state match the repository.
+
+### 12. Finish cleanly
+Commit only coherent verified work with a descriptive message. Report what changed, what was verified, and any remaining blocker.
 
 ## Status vocabulary
 
