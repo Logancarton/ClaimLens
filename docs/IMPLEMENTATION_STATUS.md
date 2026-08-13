@@ -6,7 +6,8 @@
 - **Current gate:** Gate 0 — Specification frozen enough to build.
 - **Gate status:** **NOT SATISFIED**.
 - **Active phase issue:** GitHub Issue #1.
-- **Allowed work:** product/specification review, repository governance/organization, billing-scope selection, evidence-schema design, benchmark design, synthetic fixture organization, and other Phase 0 work.
+- **Initial benchmark scope:** selected; see `docs/BILLING_SCOPE.md` and `docs/DECISIONS.md`.
+- **Allowed work:** product/specification review, repository governance/organization, evidence-schema design, benchmark design, synthetic fixture organization, and other Phase 0 work.
 - **Blocked work:** substantive Phase 1 runtime implementation, model integration, evidence-extractor implementation, rule-engine implementation, compiler/auditor implementation, payer overlays, and deferred integrations.
 
 This file is the single repository source of truth for the **current phase/gate and actual component maturity**. `docs/RELEASE_GATES.md` defines advancement requirements. GitHub issues are the work queue but do not override this state.
