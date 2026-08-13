@@ -6,7 +6,13 @@ Its core purpose is to determine what a clinical encounter actually supports, co
 
 ## Core signal flow
 
-Clinical encounter → evidence extraction → structured evidence → billing rules → candidate claim → adversarial audit → payer validation → human review.
+Full product direction:
+
+Clinical encounter → evidence extraction → structured evidence → billing rules → candidate claim → adversarial audit → payer validation when enabled → human review.
+
+For v0.1, payer validation is deferred. The required path is:
+
+`Encounter → Evidence → Rules → Candidate Claim → Audit → Result`
 
 ## Initial product boundary
 
