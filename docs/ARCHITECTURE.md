@@ -9,6 +9,8 @@
 ### Encounter layer
 Owns the raw encounter input and explicitly supplied encounter metadata. It does not decide billing and does not infer missing provider, patient-status, or place-of-service facts.
 
+PMHNP/NP and psychiatrist remain distinct provider identities in encounter metadata so later rule evaluation can use provider class when an authoritative rule requires it.
+
 ### AI evidence layer
 Interprets unstructured clinical language and maps it into the constrained schema defined in `docs/DATA_MODEL.md`. It answers: **What does the record actually say?**
 
@@ -19,7 +21,7 @@ The evidence layer must not select a billing level or convert an extraction conf
 ### Rule layer
 Represents deterministic billing requirements whenever possible. It answers: **What does that evidence support under the applicable rules?**
 
-Rules consume structured evidence; they do not rewrite the source evidence to make a requirement pass.
+Rules consume structured evidence and encounter metadata; they do not rewrite the source evidence to make a requirement pass. Provider-specific behavior is allowed only when rule provenance establishes that provider class is material.
 
 ### Compiler
 Builds a candidate claim from structured evidence plus rule results. It must preserve provenance from claim element back to evidence and rule.
@@ -40,6 +42,7 @@ The Evidence → Rule handoff carries facts, not conclusions. At minimum it pres
 - Evidence state: present, absent, ambiguous, contradictory, or not applicable.
 - Exact source provenance.
 - Current/historical/unclear temporal scope when relevant.
+- Rendering provider type/credential as supplied encounter metadata.
 - Atomic facts needed by the selected E/M, psychiatric-evaluation, and psychotherapy benchmark families.
 - Separate E/M and psychotherapy time evidence when both appear in one encounter.
 
