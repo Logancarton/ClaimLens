@@ -13,6 +13,10 @@ A benchmark case contains:
 5. Expected audit findings.
 6. Rationale for the gold answer.
 
+## Selected v0.1 service scope
+
+The benchmark uses the bounded outpatient psychiatric service scope selected in `docs/BILLING_SCOPE.md`, including all three selected service families. Cases should cover each family and relevant cross-family interactions. Benchmark examples do not become billing-rule authority.
+
 ## Initial benchmark families
 
 - Clear supported encounter.
