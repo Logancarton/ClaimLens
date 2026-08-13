@@ -17,6 +17,10 @@ A benchmark case contains:
 
 The benchmark uses the bounded outpatient psychiatric service scope selected in `docs/BILLING_SCOPE.md`, including all three selected service families. Cases should cover each family and relevant cross-family interactions. Benchmark examples do not become billing-rule authority.
 
+## Provider coverage
+
+The v0.1 benchmark covers both PMHNP/NP and psychiatrist workflows using the shared pathway defined in `docs/BILLING_SCOPE.md`.
+
 ## Initial benchmark families
 
 - Clear supported encounter.
