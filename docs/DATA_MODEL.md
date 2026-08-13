@@ -14,7 +14,16 @@ Every extracted evidence object must be able to carry:
 - `temporal_scope` — `CURRENT_ENCOUNTER`, `HISTORICAL`, or `UNCLEAR` when timing matters.
 - `confidence` — optional model interpretation confidence; never billing authority.
 
-`temporal_scope` gives ClaimLens a place to represent current versus historical evidence. It does not settle the still-open policy question of how copied-forward text is detected.
+## Current versus copied-forward/historical evidence
+
+ClaimLens must not silently treat historical or copied-forward material as current-encounter support.
+
+- Material clearly describing a prior encounter/history is `HISTORICAL`.
+- Material explicitly reassessed, reaffirmed, updated, or acted on in the current encounter may be represented as `CURRENT_ENCOUNTER` with provenance to the current documentation.
+- Repetition alone does not prove that historical material was actively addressed today.
+- When ClaimLens cannot reliably determine whether material is current or historical, `temporal_scope` is `UNCLEAR` and any material dependency on that evidence requires human review.
+
+v0.1 synthetic cases may provide explicit text or metadata cues to test this behavior. Production copy-forward detection mechanisms are deferred until a governed EHR/data workflow exists.
 
 ## Core objects
 
@@ -26,11 +35,12 @@ Minimum v0.1 metadata:
 - Encounter/source identifier.
 - Date of service when supplied.
 - Raw note text.
+- `workflow_stage` — `PRE_SIGN` or `PRE_SUBMIT`.
 - Patient status when supplied and relevant to later rules (`NEW`, `ESTABLISHED`, `UNKNOWN`).
 - Rendering provider type/credential when supplied; PMHNP/NP and psychiatrist identities remain distinct.
 - Place of service when supplied.
 
-Encounter metadata is preserved as supplied; the evidence extractor must not infer provider credential, patient status, or place of service from unsupported text.
+Encounter metadata is preserved as supplied; the evidence extractor must not infer provider credential, patient status, place of service, or workflow stage from unsupported text.
 
 ### EvidenceItem
 A single billing-relevant fact extracted from the encounter using the shared evidence contract.
@@ -136,6 +146,19 @@ Payer-specific requirements layered on top of base rules.
 
 ### ClaimResult
 The final compiled result presented for human review.
+
+## Mandatory human-review policy for v0.1
+
+A candidate/result resolves to `REVIEW` when a material fact or rule dependency that could change the result is:
+
+- `AMBIGUOUS`.
+- `CONTRADICTORY`.
+- temporally `UNCLEAR`.
+- dependent on unresolved rule-source conflict or unknown applicability.
+
+`ABSENT` does not automatically mean `REVIEW`: when a deterministic rule can conclude that required support is absent, the candidate may be `UNSUPPORTED`. `NOT_APPLICABLE` does not trigger review by itself.
+
+Model confidence is diagnostic information, not rule authority. A confidence score alone cannot convert unsupported evidence into support. Implementation may use confidence to trigger additional review, but release-changing confidence thresholds are not frozen before a measured baseline.
 
 ## v0.1 evidence-schema boundary
 
