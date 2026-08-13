@@ -14,6 +14,7 @@ Every production rule should eventually identify:
 - Rule title/purpose.
 - Jurisdiction or payer.
 - Service/code family affected.
+- Applicable provider class and care setting when relevant.
 - Authoritative source reference.
 - Source version/effective date when available.
 - Date ClaimLens verified the source.
