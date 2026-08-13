@@ -2,15 +2,17 @@
 
 ## Current work state
 
-- **Current phase:** Phase 0 — Freeze ClaimLens v0.1 specification.
-- **Current gate:** Gate 0 — Specification frozen enough to build.
-- **Gate status:** **NOT SATISFIED**.
-- **Active phase issue:** GitHub Issue #1.
-- **Initial benchmark scope:** selected; see `docs/BILLING_SCOPE.md` and `docs/DECISIONS.md`.
-- **Initial provider scope:** PMHNP/NP and psychiatrist are selected as distinct benchmark provider classes.
-- **Minimum v0.1 evidence schema:** defined in `docs/DATA_MODEL.md` and aligned with `docs/ARCHITECTURE.md`.
-- **Allowed work:** product/specification review, benchmark design, synthetic fixture organization, rule-source planning, and other Phase 0 work.
-- **Blocked work:** substantive Phase 1 runtime implementation, model integration, evidence-extractor implementation, rule-engine implementation, compiler/auditor implementation, payer overlays, and deferred integrations.
+- **Current phase:** Phase 1 — Evidence extraction baseline.
+- **Current gate:** Gate 1 — Evidence extraction baseline.
+- **Gate 0 status:** **SATISFIED** — Phase 0 specification freeze completed 2026-08-13.
+- **Gate 1 status:** **NOT SATISFIED**.
+- **Active phase issue:** GitHub Issue #2.
+- **Initial benchmark scope:** frozen; see `docs/BILLING_SCOPE.md` and `docs/DECISIONS.md`.
+- **Initial provider scope:** PMHNP/NP and psychiatrist are distinct benchmark provider classes.
+- **Workflow scope:** both `PRE_SIGN` and `PRE_SUBMIT`.
+- **Minimum v0.1 evidence schema:** frozen for Phase 1 in `docs/DATA_MODEL.md`.
+- **Allowed work:** Phase 1 encounter/evidence implementation, synthetic development cases, focused tests, and baseline extraction measurement.
+- **Blocked work:** later-phase runtime work until its release gate is reached.
 
 This file is the single repository source of truth for the **current phase/gate and actual component maturity**. `docs/RELEASE_GATES.md` defines advancement requirements. GitHub issues are the work queue but do not override this state.
 
@@ -20,15 +22,15 @@ A component is not Verified because code exists. Verification requires explicit 
 
 | Component | Status | Evidence |
 |---|---|---|
-| Product scope | Designed | `docs/PRODUCT_SCOPE.md` |
-| Use cases | Designed | `docs/USE_CASES.md` |
+| Product scope | Designed | Phase 0 approved; `docs/PRODUCT_SCOPE.md`, `docs/DECISIONS.md` |
+| Use cases | Designed | Phase 0 approved; `docs/USE_CASES.md`, `docs/DECISIONS.md` |
 | Product requirements | Designed | `docs/PRODUCT_REQUIREMENTS.md` |
-| Core architecture | Designed | `docs/ARCHITECTURE.md` |
-| Data model | Designed | `docs/DATA_MODEL.md` |
+| Core architecture | Designed | Phase 0 confirmed; `docs/ARCHITECTURE.md` |
+| Data model | Designed | Phase 0 frozen schema; `docs/DATA_MODEL.md` |
 | Billing scope framework | Designed | `docs/BILLING_SCOPE.md` |
-| Rule governance | Designed | `docs/RULE_GOVERNANCE.md` |
-| Benchmark framework | Designed | `docs/BENCHMARK_PLAN.md` |
-| Security/data development policy | Designed | `docs/SECURITY_AND_DATA.md` |
+| Rule governance | Designed | Phase 0 confirmed; `docs/RULE_GOVERNANCE.md` |
+| Benchmark framework | Designed | Phase 0 confirmed; `docs/BENCHMARK_PLAN.md` |
+| Security/data development policy | Designed | Phase 0 confirmed; `docs/SECURITY_AND_DATA.md` |
 | Encounter ingestion | Not Started | — |
 | AI evidence extraction | Not Started | — |
 | Rule engine | Not Started | — |
