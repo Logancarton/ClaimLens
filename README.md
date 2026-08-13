@@ -37,9 +37,10 @@ ollama pull medgemma1.5
 cd C:\Users\Logan\Desktop\ClaimLens
 $env:PYTHONPATH="src"
 python -m unittest discover -s tests -v
+python -m claimlens.main --phase1-baseline
 ```
 
-Default local configuration is documented in `.env.example`. Gate 1 remains open until the actual MedGemma extraction baseline is run and recorded.
+The baseline writes `output/phase1_medgemma_baseline.json` and prints the same report to the terminal. Default local configuration is documented in `.env.example`. Gate 1 remains open until the actual MedGemma extraction baseline is run and recorded.
 
 ## v0.1 finish line
 
