@@ -11,6 +11,9 @@ The subsystem that assembles candidate claim services from structured evidence a
 ## Encounter
 The source clinical encounter plus explicitly provided encounter metadata.
 
+## Workflow Stage
+The review checkpoint supplied with an encounter: `PRE_SIGN` when the clinician still controls the note, or `PRE_SUBMIT` when the finalized record is being evaluated before claim submission.
+
 ## Provider Class
 The rendering-provider category preserved in encounter metadata for rule evaluation. In v0.1, PMHNP/NP and psychiatrist are distinct provider classes even when the applicable rules treat them identically.
 
@@ -21,7 +24,7 @@ A billing-relevant fact actually supported by the encounter.
 The record-level state of an evidence item: `PRESENT`, `ABSENT`, `AMBIGUOUS`, `CONTRADICTORY`, or `NOT_APPLICABLE`. Evidence state describes what the record supports; it is not a billing decision.
 
 ## Temporal Scope
-Whether an evidence item belongs to the `CURRENT_ENCOUNTER`, is `HISTORICAL`, or is `UNCLEAR`. This represents timing without deciding how copied-forward content is detected.
+Whether an evidence item belongs to the `CURRENT_ENCOUNTER`, is `HISTORICAL`, or is `UNCLEAR`. Historical/copied-forward material does not silently become current evidence; unclear material remains `UNCLEAR` and material dependencies require review.
 
 ## Provenance
 The location/source showing where an evidence item came from.
@@ -63,7 +66,7 @@ The record does not permit a reliable supported/unsupported conclusion.
 Relevant pieces of the record conflict in a way that affects interpretation.
 
 ## Review
-Human judgment is required before relying on the result.
+Human judgment is required before relying on the result. In v0.1, material ambiguity, contradiction, unclear temporal scope, unresolved rule-source conflict, or unknown material applicability requires `REVIEW`.
 
 ## Verified
 A component has explicit behavioral evidence demonstrating intended performance. “Implemented” alone does not mean verified.
