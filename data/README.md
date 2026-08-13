@@ -1,9 +1,9 @@
 # Data
 
-This directory contains development and benchmark fixtures only.
+This directory contains synthetic development and benchmark fixtures only.
 
-- `synthetic_cases/` — generated/fake encounters used while developing behavior.
-- `test_cases/` — known-answer fixtures used for repeatable verification.
+- `development_cases/` — generated/fake encounters used while developing behavior. These may be inspected, modified, and tuned against.
+- `evaluation_cases/` — known-answer fixtures reserved for independent evaluation. Once a benchmark version is frozen, do not tune prompts/rules/models against those frozen cases and still treat them as independent evidence.
 
 Real patient/PHI data does not belong in this repository.
 

@@ -10,6 +10,10 @@ assignees: []
 
 What concrete problem or requirement does this solve?
 
+## Current phase / gate
+
+Which current phase and release gate permit this work? If the work belongs to a later phase, explain the prerequisite instead of starting it.
+
 ## Current behavior
 
 What happens now?
@@ -24,7 +28,11 @@ Encounter / Evidence / Rules / Compiler / Auditor / Payer / Result / Project doc
 
 ## Why now
 
-What benchmark failure, customer need, or roadmap gate justifies doing this now?
+What benchmark failure, customer need, current-phase requirement, or roadmap gate justifies doing this now?
+
+## Human decision boundary
+
+Does this require a product-scope, billing-policy, benchmark-threshold, security/data, integration/vendor, licensing, or phase-advancement decision? If yes, identify the exact decision before implementation.
 
 ## Verification
 

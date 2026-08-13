@@ -31,7 +31,10 @@ Single source-control home for human-reviewable executable billing-rule definiti
 Versioned model instructions. Prompts interpret information; they are not authoritative billing rules.
 
 ## `data/`
-Synthetic development cases and known-answer test fixtures only. See `data/README.md`.
+Synthetic development and benchmark fixtures only. See `data/README.md`.
+
+- `data/development_cases/` — cases agents may inspect, modify, and tune against during development.
+- `data/evaluation_cases/` — frozen known-answer cases used as independent evaluation evidence once a benchmark version is frozen.
 
 ## `tests/`
 Automated behavioral checks. See `tests/README.md`.
@@ -40,7 +43,8 @@ Automated behavioral checks. See `tests/README.md`.
 Generated local results. Contents are ignored except `.gitkeep`.
 
 ## `.agents/`
-Project-specific AI guidance, including the architecture steward and reusable development skills.
+Project-specific AI guidance, including autonomy controls, the architecture steward, and reusable development skills.
 
+- `.agents/AUTONOMY_POLICY.md` — defines autonomous work selection, authority boundaries, and human stop conditions.
 - `.agents/ARCHITECTURE_STEWARD.md` — protects product and architecture boundaries.
 - `.agents/skills/` — reusable ClaimLens development workflows followed by AI coding tools.

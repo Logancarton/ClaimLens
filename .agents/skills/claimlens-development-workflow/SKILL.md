@@ -10,6 +10,18 @@ Read the canonical project documents listed in `AGENTS.md`. Do not infer archite
 
 ## Workflow
 
+### 0. Resolve work state
+Before selecting or continuing work, read `docs/IMPLEMENTATION_STATUS.md`, `docs/RELEASE_GATES.md`, `docs/OPEN_QUESTIONS.md`, and `.agents/AUTONOMY_POLICY.md`.
+
+Confirm:
+
+- Current phase and gate.
+- Whether the requested/open issue belongs to that phase.
+- Whether an unresolved human-decision blocker prevents work.
+- Whether the change is authorized by settled project truth.
+
+If no eligible task exists, stop and report the blocker instead of starting later-phase work.
+
 ### 1. State the requested outcome
 Translate the request into one observable behavior or repository outcome.
 
@@ -39,9 +51,10 @@ Before completion ask:
 - Did a rule lose provenance?
 - Did we introduce unnecessary infrastructure?
 - Did any real patient/PHI data, credentials, or secrets enter the repository?
+- Did we silently answer an open question or cross a release gate?
 
 ### 9. Synchronize project truth
-Update `docs/IMPLEMENTATION_STATUS.md` only when evidence justifies a new status. Add architecture/product decisions to `docs/DECISIONS.md`.
+Update `docs/IMPLEMENTATION_STATUS.md` only when evidence justifies a new status or work-state change. Add architecture/product decisions to `docs/DECISIONS.md` only when explicitly settled. Preserve unresolved items in `docs/OPEN_QUESTIONS.md`.
 
 ### 10. Finish cleanly
 Review diff/status. Commit only coherent verified work with a descriptive message.

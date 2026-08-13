@@ -1,5 +1,16 @@
 # Implementation Status
 
+## Current work state
+
+- **Current phase:** Phase 0 — Freeze ClaimLens v0.1 specification.
+- **Current gate:** Gate 0 — Specification frozen enough to build.
+- **Gate status:** **NOT SATISFIED**.
+- **Active phase issue:** GitHub Issue #1.
+- **Allowed work:** product/specification review, repository governance/organization, billing-scope selection, evidence-schema design, benchmark design, synthetic fixture organization, and other Phase 0 work.
+- **Blocked work:** substantive Phase 1 runtime implementation, model integration, evidence-extractor implementation, rule-engine implementation, compiler/auditor implementation, payer overlays, and deferred integrations.
+
+This file is the single repository source of truth for the **current phase/gate and actual component maturity**. `docs/RELEASE_GATES.md` defines advancement requirements. GitHub issues are the work queue but do not override this state.
+
 Status vocabulary: **Not Started → Designed → Built → Integrated → Verified**.
 
 A component is not Verified because code exists. Verification requires explicit behavioral evidence.
@@ -25,4 +36,4 @@ A component is not Verified because code exists. Verification requires explicit 
 | Insurance intake/verification | Not Started / Deferred | — |
 | EHR/clearinghouse integration | Not Started / Deferred | — |
 
-Update this file only when the status is supported by repository evidence.
+Update this file only when the status or work state is supported by repository evidence and applicable release-gate decisions.

@@ -28,4 +28,18 @@ The Python package is `src/claimlens/`, not `src/claim_compiler/`. “Claim comp
 
 ## 2026-08-12 — `rules/` is the single rule home
 
-Billing/payer rules live under `rules/`. `data/` is reserved for synthetic development cases and known-answer test fixtures. This prevents two competing rule sources of truth.
+Billing/payer rules live under `rules/`. `data/` is reserved for synthetic development cases and known-answer benchmark fixtures. This prevents two competing rule sources of truth.
+
+## 2026-08-12 — Repository autonomy is gated by project truth
+
+AI agents may continue eligible work with minimal supervision, but autonomy is bounded by the repository. `docs/IMPLEMENTATION_STATUS.md` owns the current phase/gate, `docs/RELEASE_GATES.md` owns advancement requirements, and GitHub issues are a work queue rather than authority to skip gates.
+
+Unresolved product scope, billing-policy interpretation, benchmark release thresholds, production PHI/security workflows, integration/vendor/licensing commitments, and phase-advancement decisions require human judgment unless already settled explicitly.
+
+Reason: near-autonomous development should reduce repetitive supervision without allowing an agent to redefine what ClaimLens is or what counts as valid evidence.
+
+## 2026-08-12 — Development and evaluation fixtures are separated by purpose
+
+Synthetic fixtures are organized as `data/development_cases/` and `data/evaluation_cases/`. Development cases may be tuned against. Frozen evaluation cases are independent benchmark evidence and must not silently become tuning data.
+
+Reason: separating data by purpose makes benchmark leakage harder and gives autonomous agents an unambiguous rule for fixture use.

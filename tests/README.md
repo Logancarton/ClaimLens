@@ -1,6 +1,9 @@
 # Tests
 
-Automated tests prove component behavior. Known-answer benchmark fixtures live in `data/test_cases/` and may be consumed by tests or benchmark runners.
+Automated tests prove component behavior.
+
+- Development fixtures live in `data/development_cases/` and may be used while designing/fixing behavior.
+- Frozen known-answer benchmark fixtures live in `data/evaluation_cases/` and may be consumed by tests or benchmark runners without becoming tuning data.
 
 A test should answer a behavioral question, not merely prove that code executes.
 

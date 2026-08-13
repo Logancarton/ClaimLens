@@ -54,8 +54,11 @@ Compare architectural changes against a frozen benchmark version. Do not declare
 
 ## Data split
 
-Maintain development cases separately from frozen evaluation cases. Do not repeatedly tune prompts/rules against the same evaluation set and then treat that set as independent evidence.
+- `data/development_cases/` contains synthetic cases that may be inspected, modified, and used while developing behavior.
+- `data/evaluation_cases/` contains known-answer cases reserved for independent evaluation.
+
+Do not repeatedly tune prompts/rules/models against a frozen evaluation set and then treat that set as independent evidence. If an evaluation case must become development data, move/copy it into the development set and replace it with genuinely unseen evaluation coverage before using the benchmark as independent evidence again.
 
 ## Thresholds
 
-Initial thresholds are deliberately not frozen before a baseline exists. Establish baseline performance first, then define release gates based on risk and observed error modes.
+Initial thresholds are deliberately not frozen before a baseline exists. Establish baseline performance first, then define release gates based on risk and observed error modes. Thresholds that determine release/pilot/stop decisions require explicit human approval under `.agents/AUTONOMY_POLICY.md`.

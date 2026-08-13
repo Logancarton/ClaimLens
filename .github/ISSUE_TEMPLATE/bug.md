@@ -14,17 +14,25 @@ What should ClaimLens do?
 
 What did it do instead?
 
+## Current phase / gate
+
+Is this defect eligible to be fixed in the current phase/gate? If not, record it without crossing the gate.
+
 ## Smallest reproducible case
 
 Prefer a synthetic/known-answer case. Never paste real patient/PHI data.
 
 ## Suspected owner
 
-Encounter / Evidence / Rules / Compiler / Auditor / Payer / Result / Unknown
+Encounter / Evidence / Rules / Compiler / Auditor / Payer / Result / Project docs / Unknown
 
 ## Safety impact
 
-Could this produce hallucinated evidence, unsupported billing, missed support, false confidence, or PHI exposure?
+Could this produce hallucinated evidence, unsupported billing, missed support, false confidence, PHI exposure, or benchmark contamination?
+
+## Human decision boundary
+
+Does the fix require an unresolved product, billing-policy, security/data, benchmark-threshold, integration/vendor, licensing, or phase-advancement decision? If yes, identify it and stop before silently choosing.
 
 ## Acceptance test
 
