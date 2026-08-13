@@ -8,9 +8,20 @@ Clinical documentation, coding rules, payer requirements, and claim preparation 
 
 ClaimLens converts an encounter into structured billing evidence, applies explicit rules, compiles a defensible candidate claim, and audits the result before human approval.
 
-## Initial user
+## Initial user and commercial target
 
-Outpatient psychiatric clinicians and practices, beginning with medication-management workflows.
+The first commercial validation target is an independent or small outpatient psychiatric practice, beginning with psychiatric prescriber workflows. Individual psychiatric clinicians/practice owners are the initial buyer/user profile; larger groups, billing companies, and health systems remain later expansion targets.
+
+The v0.1 benchmark includes PMHNP/NP and psychiatrist as distinct provider classes.
+
+## Initial workflow checkpoints
+
+ClaimLens supports the same core analysis at two checkpoints:
+
+1. **Pre-sign** — identify billing-relevant documentation that is present, missing, ambiguous, contradictory, or temporally unclear while the clinician still controls the note. ClaimLens may flag issues but must not invent language or facts for the clinician to add.
+2. **Pre-submit** — evaluate the finalized encounter record and candidate claim before submission. At this checkpoint, missing support remains missing; ClaimLens does not alter the signed record.
+
+The workflow checkpoint changes the purpose of review, not the underlying evidence or billing rules.
 
 ## Inputs
 
@@ -39,6 +50,7 @@ ClaimLens does not:
 - Diagnose patients.
 - Recommend clinical treatment.
 - Invent or backfill undocumented facts.
+- Autonomously alter clinical documentation.
 - Alter a signed medical record.
 - Treat probabilistic model output as a billing rule.
 - Submit a questionable claim without human review.
