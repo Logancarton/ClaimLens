@@ -6,7 +6,9 @@ Outpatient psychiatry / behavioral-health professional services, centered on psy
 
 ## Initial clinician types
 
-Begin with workflows familiar to psychiatric prescribers. Provider-specific billing rules must be explicitly validated before being encoded.
+The v0.1 benchmark includes PMHNP/NP and psychiatrist workflows.
+
+Both use the same core ClaimLens pathway. A separate provider branch is added only when a verified rule requires one.
 
 ## Initial benchmark service families
 
