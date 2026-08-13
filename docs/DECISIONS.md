@@ -50,6 +50,6 @@ The v0.1 benchmark scope includes outpatient evaluation/management for psychiatr
 
 These are treated as one bounded outpatient psychiatric benchmark territory rather than expanding ClaimLens into multiple specialties. The minimum evidence schema and source-verified rule logic for these families must still be frozen before Gate 0 can advance.
 
-## 2026-08-13 — v0.1 provider scope includes PMHNP/NP and psychiatrist workflows
+## 2026-08-13 — PMHNP/NP and psychiatrist are distinct v0.1 provider classes
 
-The initial benchmark includes both PMHNP/NP and psychiatrist workflows. ClaimLens should use one shared core pathway for both and introduce provider-specific branching only when verified project rules require a distinction.
+The benchmark includes both provider classes and preserves their identity separately. Shared behavior may use the same rule path, while any provider-specific difference must be backed by an authoritative source before ClaimLens treats it differently.
