@@ -20,10 +20,10 @@ Requirements that can be expressed deterministically shall be evaluated outside 
 ClaimLens shall assemble candidate services only from structured evidence and applicable rule evaluations.
 
 ### PR-006 Independent audit
-ClaimLens shall independently challenge candidate services for unsupported assumptions, missing evidence, contradictions, and rule conflicts.
+ClaimLens shall independently challenge candidate services for unsupported assumptions, missing evidence, contradictions, rule conflicts, and material uncertainty.
 
 ### PR-007 Human review terminal state
-Early versions shall end in a human-reviewable result rather than autonomous submission.
+Early versions shall end in a human-reviewable result rather than autonomous submission. Material ambiguity, contradiction, unclear temporal scope, unresolved rule-source conflict, or unknown material applicability shall resolve to `REVIEW`.
 
 ### PR-008 Explainable result
 Each candidate service and audit finding shall be traceable to evidence and applicable rules.
@@ -33,6 +33,12 @@ Core behavior shall be tested against synthetic known-answer cases before produc
 
 ### PR-010 PHI-safe development repository
 The source repository shall not contain real patient/PHI data, credentials, or secrets.
+
+### PR-011 Dual review checkpoints
+The v0.1 core analysis shall support both `PRE_SIGN` and `PRE_SUBMIT` workflow stages. The same evidence and rule boundaries apply at both checkpoints; pre-sign may surface gaps while the clinician controls the note, while pre-submit evaluates the finalized record as-is.
+
+### PR-012 Temporal evidence integrity
+ClaimLens shall distinguish current-encounter evidence from historical/copied-forward material. Repetition alone shall not make historical material current. Material temporal uncertainty shall remain explicit and escalate to human review.
 
 ## P1 — After core reliability
 
@@ -53,7 +59,7 @@ The source repository shall not contain real patient/PHI data, credentials, or s
 ## Non-functional requirements
 
 ### Reliability
-The system should fail to `REVIEW` rather than confidently invent support.
+The system should fail to `REVIEW` rather than confidently invent support or silently resolve material uncertainty.
 
 ### Provenance
 Evidence and rules must remain inspectable.
