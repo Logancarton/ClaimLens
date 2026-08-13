@@ -79,3 +79,9 @@ Material `AMBIGUOUS` or `CONTRADICTORY` evidence, material `UNCLEAR` temporal sc
 The product scope and v0.1 MVP finish line are approved. The canonical architecture, rule-governance expectations, benchmark design, and development PHI/security boundary were reviewed and remain consistent with the selected service/provider/workflow scope. No unresolved architecture conflict blocks Phase 1.
 
 The human owner explicitly requested completion of the Phase 0 freeze. With the Gate 0 criteria satisfied, `docs/IMPLEMENTATION_STATUS.md` may advance to Phase 1 / Gate 1. Later-phase questions remain unresolved unless separately decided.
+
+## 2026-08-13 — MedGemma 1.5 4B is the first model-backed evidence baseline
+
+The first Phase 1 model-backed evidence-extraction baseline will use `google/medgemma-1.5-4b-it`.
+
+The model is evaluated only as an evidence interpreter behind the frozen ClaimLens extractor interface. It does not become billing authority, define the evidence schema, or replace deterministic rules. Runtime/transport remains a separate implementation decision because it may introduce dependencies, model-access terms, deployment behavior, or external-service assumptions.
