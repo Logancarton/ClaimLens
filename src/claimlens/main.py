@@ -7,7 +7,8 @@ SIGNAL FLOW
     Encounter → Evidence → Rules → Candidate Claim → Audit → Payer → Result
 
 STATUS
-    Phase 0 structural blueprint. Do not implement runtime behavior before Gate 0.
+    Phase 1 is active. Encounter/evidence components are implemented separately;
+    full-pipeline orchestration remains deferred until later gates authorize each stage.
 """
 
 # =============================================================================
