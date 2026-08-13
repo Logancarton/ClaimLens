@@ -27,7 +27,7 @@ Minimum v0.1 metadata:
 - Date of service when supplied.
 - Raw note text.
 - Patient status when supplied and relevant to later rules (`NEW`, `ESTABLISHED`, `UNKNOWN`).
-- Rendering provider type/credential when supplied.
+- Rendering provider type/credential when supplied; PMHNP/NP and psychiatrist identities remain distinct.
 - Place of service when supplied.
 
 Encounter metadata is preserved as supplied; the evidence extractor must not infer provider credential, patient status, or place of service from unsupported text.
