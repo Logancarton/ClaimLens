@@ -4,30 +4,15 @@ These questions are intentionally unresolved. Do not silently decide them inside
 
 ## Blocking rule
 
-An open question blocks work only when the **current release gate, active issue, or settled architecture requires that question to be resolved**. Otherwise preserve it here and continue with eligible work.
-
-When a question becomes blocking, an autonomous agent must stop at the smallest decision boundary and request human judgment rather than selecting an answer by convenience.
+An open question blocks work only when the current release gate, active issue, or settled architecture requires resolution. Otherwise preserve it here and continue with eligible work.
 
 ## Phase 0 review queue
 
-These questions should be reviewed during Phase 0 because they may materially shape v0.1. Their presence does not automatically mean every Phase 0 task is blocked.
-
-### Product / workflow
-
-- Is the first paid user an individual psychiatric clinician, a group practice, a billing company, or a health system?
-- Is ClaimLens first sold as software, an AI-assisted audit service, or both?
-- Does the first workflow run before note signing, before claim submission, or both?
-
-### Evidence
-
-- How should copied-forward historical content be distinguished from current encounter evidence?
-- What confidence/ambiguity states should trigger mandatory human review?
-
-The minimum v0.1 evidence schema itself is now defined in `docs/DATA_MODEL.md`; the two questions above remain policy/behavior questions rather than missing schema fields.
+None. Phase 0 decisions required for Gate 0 are resolved and recorded in `docs/DECISIONS.md` and the owning project-truth documents.
 
 ## Later-phase questions
 
-These remain important but should not block unrelated Phase 0 work unless a new explicit decision makes them current.
+These remain important but do not block Phase 1 unless explicitly made current.
 
 ### Payer
 
@@ -54,6 +39,6 @@ These remain important but should not block unrelated Phase 0 work unless a new 
 
 When a question is explicitly resolved:
 
-1. Record the decision in `docs/DECISIONS.md` when it changes product, architecture, billing scope, or operating policy.
+1. Record the decision in `docs/DECISIONS.md` when it changes product, architecture, scope, or operating policy.
 2. Update the owning project-truth document.
 3. Remove or mark the question resolved here only after those sources agree.
