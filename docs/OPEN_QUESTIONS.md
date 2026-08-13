@@ -20,12 +20,11 @@ These questions should be reviewed during Phase 0 because they may materially sh
 
 ### Billing scope
 
-- Which exact service/code families constitute the first benchmark?
 - Which provider types are in scope for version 1?
 
 ### Evidence
 
-- What is the minimum evidence schema for the first supported service family?
+- What is the minimum evidence schema for the selected v0.1 benchmark service families?
 - How should copied-forward historical content be distinguished from current encounter evidence?
 - What confidence/ambiguity states should trigger mandatory human review?
 
