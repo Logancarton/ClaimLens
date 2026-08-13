@@ -1,60 +1,57 @@
 # ClaimLens Roadmap
 
-## Phase 0 — Define and freeze the product
+## Phase 0 — Define and freeze the product — COMPLETE
 
-Phase 0 converts the product idea into repository truth that implementation is not allowed to silently redefine.
+Phase 0 converted the product idea into repository truth that implementation is not allowed to silently redefine.
 
-### Defined in repository truth
+### Frozen in repository truth
 
-- [x] Product purpose, target setting, boundaries, and non-goals are defined in `docs/PRODUCT_SCOPE.md`, `docs/USE_CASES.md`, `docs/MVP_DEFINITION.md`, and `docs/PRODUCT_REQUIREMENTS.md`.
-- [x] The initial billing territory and rule-authority model are defined in `docs/BILLING_SCOPE.md` and `docs/RULE_GOVERNANCE.md`.
-- [x] The initial benchmark service scope is selected in `docs/BILLING_SCOPE.md` and recorded in `docs/DECISIONS.md`.
-- [x] The minimum v0.1 evidence schema for the selected benchmark scope is defined in `docs/DATA_MODEL.md` and aligned with `docs/ARCHITECTURE.md`.
-- [x] Core data objects and the canonical signal flow are defined in `docs/DATA_MODEL.md` and `docs/ARCHITECTURE.md`.
-- [x] Repository ownership, maintenance responsibilities, autonomous-work boundaries, and the development workflow are defined in `docs/FILE_MAP.md`, `AGENTS.md`, and `.agents/`.
-- [x] Development safety, PHI boundaries, secret handling, and the production-data stop boundary are defined in `docs/SECURITY_AND_DATA.md`.
-- [x] The initial benchmark structure and evaluation discipline are defined in `docs/BENCHMARK_PLAN.md`.
+- [x] Product purpose, target user, boundaries, and non-goals are approved.
+- [x] Initial commercial target and delivery model are selected.
+- [x] Initial service scope and distinct PMHNP/NP and psychiatrist provider classes are selected.
+- [x] Both `PRE_SIGN` and `PRE_SUBMIT` workflow checkpoints are defined.
+- [x] Minimum v0.1 evidence schema is defined.
+- [x] Historical/copied-forward handling and mandatory human-review conditions are defined.
+- [x] Canonical signal flow and component ownership are confirmed.
+- [x] Repository ownership and development workflow are defined.
+- [x] Development PHI/security boundaries are confirmed.
+- [x] Benchmark structure and evaluation discipline are confirmed.
+- [x] No unresolved architecture conflict blocks implementation.
+- [x] Gate 0 is satisfied and Phase 1 is authorized.
 
-### Remaining Gate 0 work
+Success achieved: a new contributor can explain ClaimLens, its boundaries, canonical signal flow, first measurable target, provider/service scope, and safety rules without reading implementation code.
 
-- [ ] Complete the required human review of product scope and the v0.1 finish line.
-- [ ] Resolve any Phase 0 open question that becomes material to the selected v0.1 workflow.
-- [ ] Confirm that no unresolved architecture conflict blocks Phase 1.
-- [ ] Record any resulting decisions in `docs/DECISIONS.md`, synchronize affected project-truth files, and update `docs/IMPLEMENTATION_STATUS.md` only when Gate 0 evidence actually supports advancement.
+## Phase 1 — Evidence extraction — CURRENT
 
-Success: a new contributor can explain ClaimLens, its boundaries, its canonical signal flow, and its first measurable target without reading implementation code, and `docs/RELEASE_GATES.md` Gate 0 is satisfied.
+Implement the frozen encounter/evidence contract and convert one synthetic outpatient psychiatric encounter into structured evidence.
 
-Phase 1 remains blocked until `docs/IMPLEMENTATION_STATUS.md` records Gate 0 as satisfied.
+Phase 1 must preserve provider class, workflow stage, provenance, explicit uncertainty, and current/historical/unclear temporal scope.
 
-## Phase 1 — Evidence extraction
-
-Input one synthetic outpatient psychiatric note and return a structured evidence object.
-
-Success: evidence fields are traceable to the source note and unsupported facts are not invented.
+Success: Gate 1 in `docs/RELEASE_GATES.md` is satisfied—structured evidence is implemented, provenance and missing/ambiguous states work, synthetic development cases pass expected behavior, and the first extraction baseline is recorded.
 
 ## Phase 2 — Deterministic billing rules
 
-Apply a narrow set of billing rules to structured evidence.
+Apply a narrow set of source-verified rules to structured evidence.
 
-Success: known synthetic cases produce the expected support/unsupported/ambiguous determinations.
+Success: known synthetic cases produce expected support/unsupported/ambiguous determinations and rule conflicts fail safely to review.
 
 ## Phase 3 — Claim compiler
 
 Assemble a candidate claim from supported evidence and rules.
 
-Success: ClaimLens explains exactly why each candidate service is supported.
+Success: ClaimLens explains exactly why each candidate service is supported and rejects unsupported-service traps.
 
 ## Phase 4 — Adversarial auditor
 
 Challenge the candidate claim independently.
 
-Success: deliberately weak, contradictory, or incomplete cases are flagged without excessive false alarms.
+Success: deliberately weak, contradictory, incomplete, or uncertain cases are flagged without excessive false alarms.
 
 ## Phase 5 — Benchmark
 
 Create at least 100 known-answer synthetic/adversarial encounters.
 
-Measure evidence extraction accuracy, claim accuracy, unsupported-code rate, missed supported services, hallucinated evidence, and audit false-positive/false-negative rates.
+Measure evidence extraction accuracy, temporal-scope accuracy, claim accuracy, unsupported-code rate, missed supported services, hallucinated evidence, correct review escalation, and audit false-positive/false-negative rates.
 
 ## Phase 6 — Payer overlays
 
