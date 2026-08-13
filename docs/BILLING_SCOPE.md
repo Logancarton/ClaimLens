@@ -2,19 +2,21 @@
 
 ## Initial setting
 
-Outpatient psychiatry / behavioral-health medication-management encounters.
+Outpatient psychiatry / behavioral-health professional services, centered on psychiatric prescriber workflows.
 
 ## Initial clinician types
 
 Begin with workflows familiar to psychiatric prescribers. Provider-specific billing rules must be explicitly validated before being encoded.
 
-## Initial service families
+## Initial benchmark service families
 
-The first benchmark should focus narrowly on:
+The v0.1 benchmark includes all three of these linked outpatient psychiatric service families:
 
-- Outpatient evaluation/management support.
-- Psychiatric evaluation where deliberately added to scope.
-- Psychotherapy services/add-ons where deliberately added to scope.
+- Outpatient evaluation/management for psychiatric medication-management encounters.
+- Psychiatric diagnostic evaluation.
+- Psychotherapy services and psychotherapy add-ons.
+
+This remains a deliberately bounded outpatient psychiatric scope. It does not expand v0.1 into other specialties or settings.
 
 Exact code logic is not considered implemented merely because a code appears in a prompt or document. Each supported service must have validated source rules, explicit tests, and known-answer cases.
 
