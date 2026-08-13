@@ -26,7 +26,8 @@ For every task:
 | Canonical term/name | `TERMINOLOGY.md`, repository-wide references, docs, source comments/interfaces, tests, fixtures, issue/PR text |
 | Billing/service scope | `BILLING_SCOPE.md`, `RULE_GOVERNANCE.md`, `BENCHMARK_PLAN.md`, `MVP_DEFINITION.md` if v0.1 changes, `DECISIONS.md` |
 | Billing rule or rule source | rule definition under `rules/`, `RULE_GOVERNANCE.md`, rule tests, benchmark cases, provenance/source metadata |
-| Evidence extraction behavior/schema | `DATA_MODEL.md`, `ARCHITECTURE.md`, `src/claimlens/evidence.py`, prompts, tests, development fixtures, benchmark expectations |
+| Evidence extraction behavior/schema | `DATA_MODEL.md`, `ARCHITECTURE.md`, `src/claimlens/evidence.py`, model transport adapter when applicable, prompts, tests, development fixtures, benchmark expectations |
+| Model runtime/transport | `src/claimlens/ollama.py` or owning transport, `src/claimlens/evidence.py` interface, prompts, tests, `.env.example`, README/setup instructions, `IMPLEMENTATION_STATUS.md`, `DECISIONS.md`, `OPEN_QUESTIONS.md` when resolved |
 | Encounter input contract | `DATA_MODEL.md`, `ARCHITECTURE.md`, `src/claimlens/encounter.py`, tests, fixtures |
 | Claim compilation behavior | `ARCHITECTURE.md`, `src/claimlens/compiler.py`, rule/evidence interfaces, tests, benchmark expectations |
 | Audit behavior/finding taxonomy | `ARCHITECTURE.md`, `src/claimlens/auditor.py`, tests, benchmark expectations, `TERMINOLOGY.md` if terms change |
@@ -228,9 +229,10 @@ Project-truth layer. Start with `docs/INDEX.md`; use this file as the maintenanc
 ### `src/claimlens/`
 Runtime implementation owned by the ClaimLens product namespace.
 
-- `main.py` — thin orchestration and sequencing.
+- `main.py` — thin orchestration and Phase 1 baseline CLI while later stages remain gated.
 - `encounter.py` — encounter input contract, normalization, validation, source preservation.
 - `evidence.py` — structured evidence models/extraction interface, provenance, uncertainty, contradiction handling.
+- `ollama.py` — local Ollama model transport and schema-constrained response mapping for the Phase 1 evidence baseline; never billing authority.
 - `rules.py` — deterministic rule loading/evaluation interface and traceability.
 - `compiler.py` — candidate-service/claim construction from evidence + rule results.
 - `auditor.py` — independent adversarial review and audit findings.
@@ -264,4 +266,4 @@ Project-specific AI governance and workflow guidance.
 
 ## Completion rule
 
-Before declaring a task complete, use the change matrix above to identify the affected set, synchronize those files, then search for stale references. If a relevant companion file is intentionally not changed, its existing truth must still remain accurate.
+Before declaring a task complete, use the change matrix above to identify the affected set, synchronize those files, then search for stale references. If a relevant companion file is intentionally not modified, its existing content must remain accurate.
