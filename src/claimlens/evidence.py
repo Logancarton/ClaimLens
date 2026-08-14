@@ -257,6 +257,12 @@ class DevelopmentPatternExtractor:
         r"(?:\s+([A-Za-z]{1,4}))?\s+(\d+(?:\.\d+)?\s*mg)",
         flags=re.IGNORECASE,
     )
+    _MED_LIST_APPEARS_RE = re.compile(
+        r"\b([A-Za-z][A-Za-z0-9-]*)"
+        r"(?:\s+([A-Za-z]{1,4}))?\s+(\d+(?:\.\d+)?\s*mg)"
+        r"(?:\s+\w+){0,3}\s+appears\s+on\s+the\s+(?:current\s+)?medication\s+list\b",
+        flags=re.IGNORECASE,
+    )
     _CONDITION_RE = re.compile(
         r"^\s*([A-Z][A-Za-z /-]{2,60}?)\s+"
         r"(?:has|have|is|are|remains|remain|was|were)\b",
@@ -300,7 +306,7 @@ class DevelopmentPatternExtractor:
                         )
                     )
 
-            list_match = self._MED_LIST_RE.search(clean)
+            list_match = self._MED_LIST_RE.search(clean) or self._MED_LIST_APPEARS_RE.search(clean)
             if list_match:
                 med_name = list_match.group(1)
                 formulation = list_match.group(2)
