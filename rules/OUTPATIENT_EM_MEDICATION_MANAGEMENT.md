@@ -20,11 +20,24 @@ Primary entry points reviewed:
 
 - CPT Evaluation and Management: https://www.ama-assn.org/practice-management/cpt/cpt-evaluation-and-management
 - CPT Evaluation and Management revisions FAQs: https://www.ama-assn.org/practice-management/cpt/cpt-evaluation-and-management-em-revisions-faqs
-- CPT licensing resources: https://www.ama-assn.org/practice-management/cpt/cpt-licensing-frequently-asked-questions-faqs
+- CPT Developer Program: https://www.ama-assn.org/practice-management/cpt/cpt-developer-program
+- CPT licensing FAQs: https://www.ama-assn.org/practice-management/cpt/cpt-licensing-frequently-asked-questions-faqs
+- CPT licensing for AI FAQs: https://www.ama-assn.org/practice-management/cpt/licensing-cpt-ai-faqs
 
 The AMA is the authority for CPT coding content. Its current public E/M materials confirm the modern office/outpatient framework in which visit level may be selected using medical decision making or total practitioner/QHP time, while medically appropriate history/examination remains clinically relevant but is not itself the level-selection mechanism.
 
 Detailed CPT code descriptors, the full MDM table, code-level time thresholds, and other restricted CPT content are copyrighted/licensed. ClaimLens must not copy restricted CPT content into Git or treat an AI/secondary paraphrase as a replacement for current CPT authority.
+
+### AMA development and product licensing path identified
+
+Current AMA materials identify a CPT Developer Program for new organizations that provides royalty-free CPT access for building and testing innovations. AMA licensing FAQs separately state that CPT content used in electronic products, including products developed, maintained, serviced, distributed, or relied on by third parties, requires an appropriate license for the use case. The FAQs describe distributor/product licensing for health-technology organizations and direct new AI-based products to submit a licensing application so the AMA can determine the appropriate approach.
+
+Therefore:
+
+- A development path exists that can support authorized CPT-based build/test work if ClaimLens registers for and operates within the applicable developer-license terms.
+- A development license must not be treated as automatic authorization for commercial distribution or every AI use case.
+- The executed AMA agreement, not this repository summary, controls what licensed CPT content ClaimLens may access, store, transform, display, distribute, or use with AI.
+- Until the applicable agreement is obtained/reviewed, licensed CPT detail should not be committed to Git.
 
 ### Centers for Medicare & Medicaid Services — current Medicare E/M guidance
 
@@ -84,4 +97,4 @@ Agents must not:
 
 ## Next implementation boundary
 
-The generic deterministic rule engine is now verified. The next Gate 2 step is to define and test actual outpatient E/M rule IDs from authorized authoritative source detail. Full code-level E/M selection remains blocked wherever it requires restricted CPT detail until the human owner confirms appropriate CPT rights/access or otherwise explicitly resolves the source/licensing path.
+The generic deterministic rule engine is verified and the official AMA development/licensing path is identified. The next human decision is whether ClaimLens should use the AMA CPT Developer Program as its development-access path and pursue the appropriate product/distribution license before commercial CPT-dependent use. Until that decision and applicable license terms are resolved, full code-level E/M selection remains blocked wherever it requires restricted CPT detail.
