@@ -17,8 +17,8 @@ Current Phase 1 questions include:
 - Did medication-list presence avoid becoming undocumented medication-management activity?
 - Does the Ollama schema reject status/list words as medication action types?
 - Does a named medication action require direct source linkage between the medication and action?
-- Are independently explicit current named medication actions preserved before contradiction derivation when the model omits one?
-- Are explicit medication-list facts deduplicated by overlapping source provenance so one list statement yields one evidence item without merging separate statements?
+- Are independently explicit current named medication actions preserved before contradiction derivation when the model omits one, without inventing medication identity from generic action phrases?
+- Is explicit medication-list presence reconstructed once from source text so one list statement yields one canonical evidence item while separate statements remain distinct?
 - Are generic unresolved linkage, historical dose changes, and contradictions preserved by deterministic evidence-layer guardrails when the model omits or misclassifies them?
 
 Run the focused suite from the repository root in PowerShell:

@@ -355,27 +355,77 @@ class OllamaEvidenceExtractorTests(unittest.TestCase):
                     "workflow_stage": "PRE_SIGN",
                     "provider_class": "PMHNP_NP",
                 },
-                "raw_note_text": "Today we could increase fluoxetine next month if symptoms worsen.",
+                "raw_note_text": (
+                    "Stop fluoxetine today. "
+                    "Today we could increase fluoxetine next month if symptoms worsen."
+                ),
             }
         )
 
         def transport(url, payload, timeout):
-            return {
-                "message": {
-                    "content": json.dumps(
-                        {
-                            "conditions_addressed": [],
-                            "medication_activities": [],
-                            "additional_items": [],
-                        }
-                    )
-                }
+            content = {
+                "conditions_addressed": [],
+                "medication_activities": [
+                    {
+                        "medication": "fluoxetine",
+                        "activity_type": "stop",
+                        "state": "PRESENT",
+                        "temporal_scope": "CURRENT_ENCOUNTER",
+                        "source_quotes": ["Stop fluoxetine today."],
+                    }
+                ],
+                "additional_items": [],
             }
+            return {"message": {"content": json.dumps(content)}}
 
         evidence = extract_evidence(encounter, OllamaEvidenceExtractor(transport=transport))
-        self.assertEqual(evidence.medication_activities, ())
+        self.assertEqual(
+            {
+                activity.activity_type.normalized_value
+                for activity in evidence.medication_activities
+            },
+            {"stop"},
+        )
 
-    def test_medication_list_presence_deduplicates_overlapping_source_quotes(self):
+    def test_non_medication_action_target_is_not_promoted_by_guardrail(self):
+        encounter = Encounter.from_dict(
+            {
+                "metadata": {
+                    "encounter_id": "OLLAMA-TEST-NONMED-GUARDRAIL",
+                    "workflow_stage": "PRE_SIGN",
+                    "provider_class": "PMHNP_NP",
+                },
+                "raw_note_text": (
+                    "Continue sertraline 50 mg daily. "
+                    "Plan: monitor symptoms and follow up next month."
+                ),
+            }
+        )
+
+        def transport(url, payload, timeout):
+            content = {
+                "conditions_addressed": [],
+                "medication_activities": [
+                    {
+                        "medication": "sertraline",
+                        "activity_type": "continue",
+                        "state": "PRESENT",
+                        "temporal_scope": "CURRENT_ENCOUNTER",
+                        "source_quotes": ["Continue sertraline 50 mg daily."],
+                    }
+                ],
+                "additional_items": [],
+            }
+            return {"message": {"content": json.dumps(content)}}
+
+        evidence = extract_evidence(encounter, OllamaEvidenceExtractor(transport=transport))
+        self.assertEqual(len(evidence.medication_activities), 1)
+        self.assertEqual(
+            evidence.medication_activities[0].medication.normalized_value,
+            "sertraline",
+        )
+
+    def test_medication_list_presence_deduplicates_model_and_source_versions(self):
         encounter = Encounter.from_dict(
             {
                 "metadata": {
@@ -394,7 +444,7 @@ class OllamaEvidenceExtractorTests(unittest.TestCase):
                 "additional_items": [
                     {
                         "category": "medication_list_presence",
-                        "state": "PRESENT",
+                        "state": "AMBIGUOUS",
                         "normalized_value": "bupropion xl 150 mg daily",
                         "temporal_scope": "CURRENT_ENCOUNTER",
                         "source_quotes": [
@@ -406,10 +456,13 @@ class OllamaEvidenceExtractorTests(unittest.TestCase):
             return {"message": {"content": json.dumps(content)}}
 
         evidence = extract_evidence(encounter, OllamaEvidenceExtractor(transport=transport))
-        self.assertEqual(
-            sum(item.category == "medication_list_presence" for item in evidence.additional_items),
-            1,
-        )
+        list_items = [
+            item for item in evidence.additional_items
+            if item.category == "medication_list_presence"
+        ]
+        self.assertEqual(len(list_items), 1)
+        self.assertIs(list_items[0].state, EvidenceState.PRESENT)
+        self.assertFalse(list_items[0].requires_review)
 
     def test_separate_medication_list_statements_remain_separate(self):
         encounter = Encounter.from_dict(

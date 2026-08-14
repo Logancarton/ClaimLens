@@ -91,10 +91,10 @@ This result materially improves on both the initial 0.2 exact-case baseline and 
 
 The current correction targets only those two measured mechanisms:
 
-- Preserve independently explicit named medication actions from current, non-conditional source sentences when the model omits one, before contradiction derivation runs.
-- Deduplicate medication-list evidence by overlapping source provenance so one explicit list statement cannot become multiple evidence items while separate list statements remain distinct.
+- Preserve another independently explicit current action only for a medication whose identity has already been validated by a directly supported model medication activity; require a current, non-conditional source sentence before adding the omitted action. This prevents generic phrases such as `monitor symptoms` from creating a medication identity.
+- Make deterministic source parsing the single owner of explicit `medication_list_presence` evidence after validating any model-supplied list quote. One explicit list statement therefore yields one canonical list-presence item, while separate source statements remain distinct.
 
-Focused mocked-Ollama tests cover both behaviors plus the safety condition that conditional named actions are not promoted to current actions. The real five-case MedGemma/Ollama baseline must be rerun before these corrections count as measured model-backed improvement.
+Focused mocked-Ollama tests cover both behaviors, conditional-action safety, and the requirement that generic non-medication action targets are not promoted. The real five-case MedGemma/Ollama baseline must be rerun before these corrections count as measured model-backed improvement.
 
 Interpretation:
 

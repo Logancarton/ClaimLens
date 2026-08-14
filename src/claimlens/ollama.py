@@ -124,15 +124,6 @@ _FUTURE_OR_CONDITIONAL_RE = re.compile(
     re.IGNORECASE,
 )
 
-_NON_MEDICATION_ACTION_TARGETS = {
-    "all",
-    "current",
-    "dose",
-    "medication",
-    "medications",
-    "the",
-}
-
 SCHEMA: dict[str, Any] = {
     "type": "object",
     "properties": {
@@ -332,7 +323,12 @@ def _to_evidence(payload: Mapping[str, Any], encounter: Encounter) -> Structured
             raise ValueError("additional evidence category cannot be blank")
         if category not in ADDITIONAL_ITEM_CATEGORIES:
             raise ValueError(f"unsupported additional evidence category: {category}")
-        if category == "medication_list_presence" and not _explicit_medication_list_source(sources):
+        if category == "medication_list_presence":
+            if not _explicit_medication_list_source(sources):
+                continue
+            # Explicit list presence is reconstructed once from source sentences below.
+            # Skipping the model copy prevents one source statement from becoming
+            # multiple evidence items with different quote spans or normalizations.
             continue
         _append_unique_additional(
             additional,
@@ -405,6 +401,12 @@ def _append_source_guardrails(
     activities: list[MedicationActivity],
     additional_items: list[EvidenceItem],
 ) -> None:
+    known_medications = {
+        str(activity.medication.normalized_value).lower()
+        for activity in activities
+        if activity.medication is not None
+    }
+
     for sentence, start in _sentence_spans(encounter.raw_note_text):
         clean = sentence.strip()
         if not clean:
@@ -442,7 +444,7 @@ def _append_source_guardrails(
         ):
             for match in _EXPLICIT_NAMED_ACTION_RE.finditer(clean):
                 medication = match.group("medication").lower()
-                if medication in _NON_MEDICATION_ACTION_TARGETS:
+                if medication not in known_medications:
                     continue
                 action = _ACTION_NORMALIZATION[match.group("action").lower()]
                 if _has_medication_activity(
@@ -570,14 +572,6 @@ def _append_unique_additional(
     additional_items: list[EvidenceItem],
     candidate: EvidenceItem,
 ) -> None:
-    if candidate.category == "medication_list_presence" and any(
-        item.category == candidate.category
-        and item.state is candidate.state
-        and _provenance_overlaps(item.provenance, candidate.provenance)
-        for item in additional_items
-    ):
-        return
-
     candidate_quotes = tuple(source.quote for source in candidate.provenance)
     if any(
         item.category == candidate.category
@@ -587,31 +581,6 @@ def _append_unique_additional(
     ):
         return
     additional_items.append(candidate)
-
-
-def _provenance_overlaps(
-    left: tuple[SourceProvenance, ...],
-    right: tuple[SourceProvenance, ...],
-) -> bool:
-    for left_source in left:
-        for right_source in right:
-            if left_source.encounter_id != right_source.encounter_id:
-                continue
-            if left_source.field_name != right_source.field_name:
-                continue
-            if (
-                left_source.start_char is None
-                or left_source.end_char is None
-                or right_source.start_char is None
-                or right_source.end_char is None
-            ):
-                continue
-            if (
-                left_source.start_char < right_source.end_char
-                and right_source.start_char < left_source.end_char
-            ):
-                return True
-    return False
 
 
 def _sentence_spans(text: str):
