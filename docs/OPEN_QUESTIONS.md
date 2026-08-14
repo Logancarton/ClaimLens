@@ -10,13 +10,27 @@ An open question blocks work only when the current release gate, active issue, o
 
 None. Phase 0 decisions required for Gate 0 are resolved and recorded in `docs/DECISIONS.md` and the owning project-truth documents.
 
-## Phase 1 current question
+## Phase 1 review queue
 
-None. The first model and runtime are selected: `google/medgemma-1.5-4b-it` through the local Ollama API. Remaining Phase 1 work is model-backed verification and baseline measurement.
+None. Gate 1 is satisfied. The MedGemma/Ollama evidence-extraction baseline is verified against the current Phase 1 development cases, with prior failed and partial runs preserved in `docs/BASELINE_RESULTS.md`.
+
+## Phase 2 current question
+
+### First rule service family — BLOCKING
+
+Which already-approved outpatient psychiatric service family should be implemented first as the Gate 2 deterministic rule baseline?
+
+Current frozen options from `docs/BILLING_SCOPE.md`:
+
+- Outpatient evaluation/management for psychiatric medication-management encounters.
+- Psychiatric diagnostic evaluation.
+- Psychotherapy services and psychotherapy add-ons.
+
+Selecting the first service family is a human decision under `.agents/AUTONOMY_POLICY.md`. Until explicitly selected, agents must not choose one by convenience or begin authoritative rule implementation that assumes the choice.
 
 ## Later-phase questions
 
-These remain important but do not block Phase 1 unless explicitly made current.
+These remain important but do not block Phase 2 unless explicitly made current.
 
 ### Payer
 
