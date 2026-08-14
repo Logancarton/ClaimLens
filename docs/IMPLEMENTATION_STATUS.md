@@ -2,28 +2,29 @@
 
 ## Current work state
 
-- **Current phase:** Phase 1 — Evidence extraction baseline.
-- **Current gate:** Gate 1 — Evidence extraction baseline.
+- **Current phase:** Phase 2 — First validated billing rule set.
+- **Current gate:** Gate 2 — Rule engine baseline.
 - **Gate 0 status:** **SATISFIED** — Phase 0 specification freeze completed 2026-08-13.
-- **Gate 1 status:** **NOT SATISFIED**.
-- **Active phase issue:** GitHub Issue #2.
+- **Gate 1 status:** **SATISFIED** — Phase 1 evidence extraction baseline verified 2026-08-13.
+- **Gate 2 status:** **NOT SATISFIED**.
+- **Active phase issue:** GitHub Issue #3.
 - **Initial benchmark scope:** frozen; see `docs/BILLING_SCOPE.md` and `docs/DECISIONS.md`.
 - **Initial provider scope:** PMHNP/NP and psychiatrist are distinct benchmark provider classes.
 - **Workflow scope:** both `PRE_SIGN` and `PRE_SUBMIT`.
 - **Minimum v0.1 evidence schema:** frozen in `docs/DATA_MODEL.md` and implemented in `src/claimlens/evidence.py`.
 - **Selected Phase 1 model baseline:** `google/medgemma-1.5-4b-it`.
 - **Selected Phase 1 runtime:** local Ollama API using model name `medgemma1.5`.
-- **Phase 1 progress:** encounter/evidence contracts, provenance validation, temporal scope, uncertainty/review preservation, deterministic development baseline, Ollama structured-output adapter, local baseline CLI, deterministic safety guardrails around model evidence, and narrow residual guardrails for missed explicit current named actions plus medication-list deduplication are implemented.
-- **Phase 1 verification:** the initial and replicated model-backed runs produced 1/5 exact matches. Prompt v2 produced 0/5 exact matches while improving current-action recall to 1.0. The first guarded-extractor rerun improved to 3/5 exact matches (`exact_case_rate = 0.6`), review accuracy 0.8, current action precision/recall 1.0/0.75, historical action precision/recall 1.0/1.0, zero unsupported current actions, and one missed current action. Residual failures were limited to DEV-003 missing one independently explicit current action and DEV-005 duplicating one medication-list statement. Focused mocked-Ollama tests now cover both residual mechanisms, conditional-action safety, and protection against inventing medication identity from generic action phrases, but the updated unit suite and real model-backed five-case rerun still require local execution.
-- **Remaining Gate 1 work:** run the updated focused/broader unit suite, rerun the five-case model-backed development baseline through the residual guardrail correction, compare against the recorded 0.6 exact-case result, analyze any remaining failures, then perform the final affected-file sweep before evaluating Gate 1 again.
-- **Allowed work:** Phase 1 guarded-extractor verification, failure analysis, prompt/extractor correction behind the frozen interface, additional synthetic development cases, focused tests, and extraction measurement.
-- **Blocked work:** Phase 2 rule-engine implementation and later-phase runtime work until Gate 1 is satisfied.
+- **Phase 1 verification:** complete. The full applicable unit suite passed 22/22 tests. The real local MedGemma/Ollama five-case development baseline then matched 5/5 cases (`exact_case_rate = 1.0`) with valid output rate 1.0, review accuracy 1.0, current action precision/recall 1.0/1.0, historical action precision/recall 1.0/1.0, zero unsupported current actions, and zero missed current actions. `docs/BASELINE_RESULTS.md` preserves the initial 1/5 baseline, its replication, the failed 0/5 prompt-v2 experiment, the intermediate guarded 3/5 result, and the final verified 5/5 result.
+- **Gate 1 conclusion:** all Gate 1 requirements in `docs/RELEASE_GATES.md` are supported by repository and supplied local-runtime evidence: structured schema, provenance, explicit missing/ambiguous behavior, passing synthetic development cases, and a recorded model-backed baseline.
+- **Phase 2 entry state:** Phase 2 is active, but substantive rule-engine implementation is blocked until the human owner selects which already-approved outpatient psychiatric service family should be implemented first. That selection is a human decision under `.agents/AUTONOMY_POLICY.md`; the agent must not choose it silently.
+- **Allowed work:** Phase 2 repository review, preparation that does not choose or reinterpret billing scope, and implementation/testing after the first service family is explicitly selected and authoritative sources are identified.
+- **Blocked work:** choosing the first service family on the user's behalf; implementing authoritative billing logic before that selection/source work; Phase 3 compiler implementation and later-phase runtime work until Gate 2 is satisfied.
 
 This file is the single repository source of truth for the **current phase/gate and actual component maturity**. `docs/RELEASE_GATES.md` defines advancement requirements. GitHub issues are the work queue but do not override this state.
 
 Status vocabulary: **Not Started → Designed → Built → Integrated → Verified**.
 
-A component is not Verified because code exists. Verification requires explicit behavioral evidence.
+A component is not Verified because code exists. Verification requires explicit behavioral evidence and every applicable verification checkpoint defined in `AGENTS.md` and the ClaimLens development workflow skill.
 
 | Component | Status | Evidence |
 |---|---|---|
@@ -37,9 +38,9 @@ A component is not Verified because code exists. Verification requires explicit 
 | Benchmark framework | Designed | Phase 0 confirmed; `docs/BENCHMARK_PLAN.md` |
 | Security/data development policy | Designed | Phase 0 confirmed; `docs/SECURITY_AND_DATA.md` |
 | Encounter ingestion | Verified | `src/claimlens/encounter.py`; `tests/test_encounter.py` |
-| AI evidence extraction | Integrated | Local Ollama/MedGemma path runs end-to-end; guarded model evidence reached 3/5 exact on the latest measured five-case run; residual guardrail correction and focused tests are implemented, with local rerun pending |
-| Phase 1 development cases | Built | `data/development_cases/phase1_baseline_cases.json`; latest guarded model-backed run matched 3/5 cases and exposed the two residual normalization failures now targeted by focused tests |
-| Rule engine | Not Started | — |
+| AI evidence extraction | Verified | Local Ollama/MedGemma path runs end-to-end; 22/22 applicable unit tests passed and the final real five-case Phase 1 development run matched 5/5 with all reported extraction/review precision/recall metrics at 1.0 and zero unsupported/missed current actions |
+| Phase 1 development cases | Verified | `data/development_cases/phase1_baseline_cases.json`; final model-backed run matched all 5/5 expected cases; prior failed/partial iterations remain preserved in `docs/BASELINE_RESULTS.md` |
+| Rule engine | Not Started | Phase 2 current; first service family requires explicit human selection before implementation |
 | Claim compiler | Not Started | — |
 | Adversarial auditor | Not Started | — |
 | Payer overlays | Not Started | — |
