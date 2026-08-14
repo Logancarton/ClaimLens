@@ -26,7 +26,7 @@ Start with `docs/INDEX.md`. It defines the reading order for scope, MVP, require
 
 ClaimLens only earns complexity when a demonstrated billing problem requires it. The first objective is not a custom AI architecture. The first objective is a reliable, measurable claim-compilation workflow.
 
-## Phase 1 local model baseline
+## Phase 1 local model baseline — verified
 
 The first model-backed evidence baseline uses MedGemma 1.5 4B through the local Ollama API. `src/claimlens/ollama.py` is a transport and structured-output adapter behind the frozen evidence interface; the model is not billing authority.
 
@@ -40,7 +40,11 @@ python -m unittest discover -s tests -v
 python -m claimlens.main --phase1-baseline
 ```
 
-The baseline writes `output/phase1_medgemma_baseline.json` and prints the same report to the terminal. Default local configuration is documented in `.env.example`. The first successful model-backed development baseline is recorded in `docs/BASELINE_RESULTS.md`; Gate 1 remains open while the measured extraction failures are corrected and re-tested.
+The baseline writes `output/phase1_medgemma_baseline.json` and prints the same report to the terminal. Default local configuration is documented in `.env.example`. The verified development history is recorded in `docs/BASELINE_RESULTS.md`, including failed and partial runs rather than rewriting them. Gate 1 is satisfied; the final local MedGemma/Ollama five-case development baseline matched 5/5 expected cases.
+
+## Current phase
+
+Phase 2 / Gate 2 is active. The first deterministic rule family is outpatient evaluation/management for psychiatric medication-management encounters. The generic rule-engine contract is verified, while the actual source-verified outpatient E/M rule set remains incomplete. Current authoritative status and blockers belong in `docs/IMPLEMENTATION_STATUS.md`.
 
 ## v0.1 finish line
 
