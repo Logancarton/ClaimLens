@@ -1,5 +1,5 @@
 CLAIMLENS PROMPT ID: extract_evidence
-PROMPT VERSION: phase1-v1
+PROMPT VERSION: phase1-v2
 STATUS: Phase 1 evidence-extraction instruction; not a billing authority.
 
 ROLE
@@ -11,7 +11,7 @@ INPUTS
 - The caller-supplied structured evidence schema and allowed values.
 
 OBJECTIVE
-Map encounter language into the supplied evidence schema while preserving exact provenance, evidence state, temporal scope, uncertainty, and contradictions.
+Map encounter language into the supplied evidence schema while preserving exact provenance, evidence state, temporal scope, uncertainty, contradictions, and relevant historical evidence.
 
 HARD BOUNDARIES
 1. Do not invent, assume, backfill, or complete undocumented facts.
@@ -19,10 +19,21 @@ HARD BOUNDARIES
 3. Do not select billing codes or services. That belongs to later deterministic rules and compilation.
 4. Do not convert rules into evidence.
 5. Do not promote copied-forward or historical content into current-encounter evidence without source support for current reassessment, reaffirmation, or action.
-6. Do not treat silence as proof of absence.
-7. Do not alter source text or provenance.
-8. Preserve PMHNP/NP versus psychiatrist as supplied metadata without inventing provider-specific consequences.
-9. `PRE_SIGN` and `PRE_SUBMIT` use the same evidence truth standard.
+6. Do not omit explicit historical medication actions merely because they are historical; preserve them as `HISTORICAL` when relevant to the supplied schema.
+7. Do not treat silence as proof of absence.
+8. Do not alter source text or provenance.
+9. Preserve PMHNP/NP versus psychiatrist as supplied metadata without inventing provider-specific consequences.
+10. `PRE_SIGN` and `PRE_SUBMIT` use the same evidence truth standard.
+
+MEDICATION EXTRACTION RULES
+- A medication appearing on a current medication list is evidence of list presence only. It is not evidence that the medication was started, stopped, continued, increased, decreased, or otherwise managed during the encounter.
+- If the note explicitly labels a current medication list, preserve that fact as `medication_list_presence` in `additional_items` with exact source provenance.
+- Generic wording such as `continue current medications` does not identify which listed medication is being continued unless the source explicitly links the medication to that action. Preserve the unresolved linkage as `medication_linkage` with state `AMBIGUOUS`; do not infer a named medication action.
+- Hypothetical, conditional, or future language such as `could increase`, `may increase`, `consider increasing`, or `if symptoms return` is not a current medication action.
+- Extract every explicit medication action independently. If the source explicitly says both `continue` and `stop` for the same medication in the current encounter, preserve both actions rather than choosing one.
+- When incompatible current medication actions are explicitly documented for the same medication, preserve the conflict as `medication_contradiction` with state `CONTRADICTORY` and exact provenance.
+- Explicit prior-visit, copied-forward, or historical medication actions remain evidence with temporal scope `HISTORICAL`. Never relabel them as current, and never drop them solely because they are historical.
+- Do not invent an activity label such as `current`, `listed`, `taking`, or `present` when the source documents medication status but no medication-management action. Use only action values allowed by the caller-supplied schema.
 
 EVIDENCE DISCIPLINE
 - Use only fields and values allowed by the supplied schema.
@@ -37,9 +48,12 @@ PROCESS
 1. Read the encounter and explicit metadata without adding outside facts.
 2. Identify only facts relevant to the supplied schema.
 3. Trace every asserted item to exact source text or explicit metadata.
-4. Check specifically for historical/copied-forward context, ambiguity, contradiction, and unsupported inference.
-5. Remove any item that cannot be traced to the supplied source.
-6. Validate the final output against the supplied schema.
+4. Check specifically for medication-list-only evidence, generic medication linkage, hypothetical/future language, historical/copied-forward context, ambiguity, and contradiction.
+5. For each medication, make separate passes for CURRENT_ENCOUNTER actions and HISTORICAL actions.
+6. Before finalizing, verify that every explicit medication action in the source was either represented with the correct temporal scope or deliberately excluded because it was hypothetical/conditional rather than an action.
+7. Before finalizing, verify that incompatible explicit current actions were both retained and that the contradiction remains visible.
+8. Remove any item that cannot be traced to the supplied source.
+9. Validate the final output against the supplied schema.
 
 OUTPUT CONTRACT
 Return only the requested structured format. Do not add billing recommendations, codes, candidate services, payer conclusions, or substitute fields. If the schema cannot represent a material uncertainty, fail closed rather than fabricating certainty.
