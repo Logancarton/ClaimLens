@@ -69,6 +69,12 @@ _ACTION_SOURCE_PATTERNS = {
     "other_management": r"\b(manage|managed|management|plan|discussed|reviewed)\b",
 }
 
+_HISTORICAL_CHANGE_RE = re.compile(
+    r"\b([A-Za-z][A-Za-z0-9-]*)\s+was\s+"
+    r"(increased|decreased|reduced|lowered|raised)\b",
+    re.IGNORECASE,
+)
+
 SCHEMA: dict[str, Any] = {
     "type": "object",
     "properties": {
@@ -214,9 +220,9 @@ def _content_json(response: Mapping[str, Any]) -> Mapping[str, Any]:
 
 
 def _to_evidence(payload: Mapping[str, Any], encounter: Encounter) -> StructuredEvidence:
-    conditions = []
-    medications = []
-    additional = []
+    conditions: list[ConditionAddressed] = []
+    medications: list[MedicationActivity] = []
+    additional: list[EvidenceItem] = []
 
     for raw in _objects(payload, "conditions_addressed"):
         sources = _sources(encounter, raw)
@@ -242,7 +248,18 @@ def _to_evidence(payload: Mapping[str, Any], encounter: Encounter) -> Structured
             raise ValueError("medication activity requires medication and activity_type")
         if action not in MEDICATION_ACTIVITY_TYPES:
             raise ValueError(f"unsupported medication activity_type: {action}")
-        _require_explicit_named_action_source(medication, action, sources)
+        if not _explicit_named_action_source(medication, action, sources):
+            _append_unique_additional(
+                additional,
+                EvidenceItem(
+                    category="medication_linkage",
+                    state=EvidenceState.AMBIGUOUS,
+                    normalized_value=f"{medication}: {action}",
+                    temporal_scope=temporal,
+                    provenance=sources,
+                ),
+            )
+            continue
         medications.append(
             MedicationActivity(
                 medication=EvidenceItem("medication", state, medication, temporal, sources),
@@ -259,16 +276,18 @@ def _to_evidence(payload: Mapping[str, Any], encounter: Encounter) -> Structured
             raise ValueError(f"unsupported additional evidence category: {category}")
         if category == "medication_list_presence" and not _explicit_medication_list_source(sources):
             continue
-        additional.append(
+        _append_unique_additional(
+            additional,
             EvidenceItem(
                 category,
                 EvidenceState(str(raw["state"])),
                 raw.get("normalized_value"),
                 TemporalScope(str(raw["temporal_scope"])),
                 sources,
-            )
+            ),
         )
 
+    _append_source_guardrails(encounter, medications, additional)
     _append_derived_medication_contradictions(medications, additional)
 
     return StructuredEvidence(
@@ -302,18 +321,17 @@ def _sources(encounter: Encounter, raw: Mapping[str, Any]) -> tuple[SourceProven
     return tuple(SourceProvenance.from_note(encounter, str(quote)) for quote in quotes)
 
 
-def _require_explicit_named_action_source(
+def _explicit_named_action_source(
     medication: str,
     action: str,
     sources: tuple[SourceProvenance, ...],
-) -> None:
+) -> bool:
     action_pattern = _ACTION_SOURCE_PATTERNS[action]
     medication_pattern = re.compile(rf"\b{re.escape(medication)}\b", re.IGNORECASE)
-    for source in sources:
-        if medication_pattern.search(source.quote) and re.search(action_pattern, source.quote, re.IGNORECASE):
-            return
-    raise ValueError(
-        "named medication activity requires one source quote containing both the medication and action"
+    return any(
+        medication_pattern.search(source.quote)
+        and re.search(action_pattern, source.quote, re.IGNORECASE)
+        for source in sources
     )
 
 
@@ -322,6 +340,84 @@ def _explicit_medication_list_source(sources: tuple[SourceProvenance, ...]) -> b
         re.search(r"\bmedication\s+list\b", source.quote, re.IGNORECASE)
         for source in sources
     )
+
+
+def _append_source_guardrails(
+    encounter: Encounter,
+    activities: list[MedicationActivity],
+    additional_items: list[EvidenceItem],
+) -> None:
+    for sentence, start in _sentence_spans(encounter.raw_note_text):
+        clean = sentence.strip()
+        if not clean:
+            continue
+        provenance = SourceProvenance.from_note(encounter, sentence, start_char=start)
+        temporal = _guardrail_temporal_scope(clean)
+
+        if re.search(r"\bmedication\s+list\b", clean, re.IGNORECASE):
+            _append_unique_additional(
+                additional_items,
+                EvidenceItem(
+                    category="medication_list_presence",
+                    state=EvidenceState.PRESENT,
+                    normalized_value=clean,
+                    temporal_scope=temporal,
+                    provenance=(provenance,),
+                ),
+            )
+
+        if re.search(r"\bcontinue\s+current\s+medications\b", clean, re.IGNORECASE):
+            _append_unique_additional(
+                additional_items,
+                EvidenceItem(
+                    category="medication_linkage",
+                    state=EvidenceState.AMBIGUOUS,
+                    normalized_value="continue current medications",
+                    temporal_scope=temporal,
+                    provenance=(provenance,),
+                ),
+            )
+
+        if not _has_historical_cue(clean):
+            continue
+        historical_match = _HISTORICAL_CHANGE_RE.search(clean)
+        if not historical_match:
+            continue
+        medication, action = historical_match.groups()
+        normalized_action = {
+            "increased": "increase",
+            "decreased": "decrease",
+            "reduced": "reduce",
+            "lowered": "lower",
+            "raised": "raise",
+        }[action.lower()]
+        medication = medication.lower()
+        if any(
+            item.medication is not None
+            and str(item.medication.normalized_value).lower() == medication
+            and str(item.activity_type.normalized_value).lower() == normalized_action
+            and item.activity_type.temporal_scope is TemporalScope.HISTORICAL
+            for item in activities
+        ):
+            continue
+        activities.append(
+            MedicationActivity(
+                medication=EvidenceItem(
+                    category="medication",
+                    state=EvidenceState.PRESENT,
+                    normalized_value=medication,
+                    temporal_scope=TemporalScope.HISTORICAL,
+                    provenance=(provenance,),
+                ),
+                activity_type=EvidenceItem(
+                    category="medication_activity_type",
+                    state=EvidenceState.PRESENT,
+                    normalized_value=normalized_action,
+                    temporal_scope=TemporalScope.HISTORICAL,
+                    provenance=(provenance,),
+                ),
+            )
+        )
 
 
 def _append_derived_medication_contradictions(
@@ -350,12 +446,57 @@ def _append_derived_medication_contradictions(
         provenance: list[SourceProvenance] = []
         for item in grouped:
             provenance.extend(item.activity_type.provenance)
-        additional_items.append(
+        _append_unique_additional(
+            additional_items,
             EvidenceItem(
                 category="medication_contradiction",
                 state=EvidenceState.CONTRADICTORY,
                 normalized_value=f"{medication}: {', '.join(sorted(actions))}",
                 temporal_scope=TemporalScope.CURRENT_ENCOUNTER,
                 provenance=tuple(dict.fromkeys(provenance)),
-            )
+            ),
         )
+
+
+def _append_unique_additional(
+    additional_items: list[EvidenceItem],
+    candidate: EvidenceItem,
+) -> None:
+    candidate_quotes = tuple(source.quote for source in candidate.provenance)
+    if any(
+        item.category == candidate.category
+        and item.state is candidate.state
+        and tuple(source.quote for source in item.provenance) == candidate_quotes
+        for item in additional_items
+    ):
+        return
+    additional_items.append(candidate)
+
+
+def _sentence_spans(text: str):
+    for match in re.finditer(r"[^.!?\n]+(?:[.!?]|(?=\n|$))", text):
+        sentence = match.group(0)
+        if sentence.strip():
+            yield sentence, match.start()
+
+
+def _has_historical_cue(sentence: str) -> bool:
+    return bool(
+        re.search(
+            r"\b(prior[- ]visit|previous appointment|previous visit|copied|histor(?:y|ical))\b",
+            sentence,
+            re.IGNORECASE,
+        )
+    )
+
+
+def _guardrail_temporal_scope(sentence: str) -> TemporalScope:
+    if _has_historical_cue(sentence):
+        return TemporalScope.HISTORICAL
+    if re.search(
+        r"\b(today|for now|current|plan|assessment|continue|stop|start|reports?|remains?|discussed|stable|improved)\b",
+        sentence,
+        re.IGNORECASE,
+    ):
+        return TemporalScope.CURRENT_ENCOUNTER
+    return TemporalScope.UNCLEAR
