@@ -14,23 +14,23 @@ None. Phase 0 decisions required for Gate 0 are resolved and recorded in `docs/D
 
 None. Gate 1 is satisfied. The MedGemma/Ollama evidence-extraction baseline is verified against the current Phase 1 development cases, with prior failed and partial runs preserved in `docs/BASELINE_RESULTS.md`.
 
-## Phase 2 current question
+## Phase 2 current questions
 
-### First rule service family — BLOCKING
+### First rule service family — RESOLVED
 
-Which already-approved outpatient psychiatric service family should be implemented first as the Gate 2 deterministic rule baseline?
+The human owner selected **outpatient evaluation/management for psychiatric medication-management encounters** as the first Gate 2 deterministic rule family. The decision is recorded in `docs/DECISIONS.md`.
 
-Current frozen options from `docs/BILLING_SCOPE.md`:
+### Detailed CPT E/M rule source / licensing — BLOCKING FOR RESTRICTED CPT DETAIL
 
-- Outpatient evaluation/management for psychiatric medication-management encounters.
-- Psychiatric diagnostic evaluation.
-- Psychotherapy services and psychotherapy add-ons.
+The current authoritative-source review confirms that outpatient E/M level selection ultimately depends on the AMA CPT E/M guidelines. CMS's May 2026 `MLN006764 — Evaluation and Management Services` provides current Medicare guidance but explicitly directs users to the AMA E/M Services Guidelines for the detailed MDM breakdown.
 
-Selecting the first service family is a human decision under `.agents/AUTONOMY_POLICY.md`. Until explicitly selected, agents must not choose one by convenience or begin authoritative rule implementation that assumes the choice.
+ClaimLens may continue Phase 2 work that uses public authoritative propositions, source metadata, generic rule-engine infrastructure, and tests. It must **not** copy or embed restricted CPT descriptors, detailed MDM tables, code-level time thresholds, or other licensed CPT content unless the human owner confirms that ClaimLens has appropriate rights/access for the intended product use.
+
+This does not authorize an agent to replace CPT authority with a blog, AI summary, payer summary, remembered coding rule, or inferred approximation.
 
 ## Later-phase questions
 
-These remain important but do not block Phase 2 unless explicitly made current.
+These remain important but do not block currently authorized Phase 2 preparation unless explicitly made current.
 
 ### Payer
 
