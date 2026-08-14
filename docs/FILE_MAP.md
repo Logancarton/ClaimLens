@@ -38,6 +38,7 @@ For every task:
 | Test expectation | owning behavior, relevant fixtures, benchmark plan if evaluation meaning changed |
 | Development fixture | `data/development_cases/`, owning tests/behavior only; do not silently modify frozen evaluation cases |
 | Evaluation fixture/benchmark truth | `data/evaluation_cases/`, `BENCHMARK_PLAN.md`, `RELEASE_GATES.md`, benchmark outputs; require explicit justification before changing frozen truth |
+| Recorded development/model baseline | `BASELINE_RESULTS.md`, `BENCHMARK_PLAN.md`, `IMPLEMENTATION_STATUS.md`, active issue, runner/output references |
 | Benchmark metric/threshold | `BENCHMARK_PLAN.md`, `RELEASE_GATES.md`, `IMPLEMENTATION_STATUS.md` if gate state changes, `DECISIONS.md` when explicitly approved |
 | Security/PHI handling | `SECURITY_AND_DATA.md`, `.gitignore`, architecture/data flow, dependencies/integrations, risk register |
 | Dependency/environment requirement | `requirements.txt`, `.env.example`, architecture/security docs if material, README/setup instructions if user-visible |
@@ -149,6 +150,15 @@ For every task:
 **Check with:** evaluation fixtures, tests, `RELEASE_GATES.md`, `IMPLEMENTATION_STATUS.md`.
 
 **Do not use for:** Development-only examples or silently moving success thresholds after results are known.
+
+### `BASELINE_RESULTS.md`
+**Purpose:** Preserves measured development/model baseline results and observed failure modes without redefining the benchmark plan or release thresholds.
+
+**Update when:** A named baseline is actually run, corrected for a measurement artifact, or superseded by a clearly identified rerun.
+
+**Check with:** `BENCHMARK_PLAN.md`, the runner/output source, `IMPLEMENTATION_STATUS.md`, and the active phase issue.
+
+**Do not use for:** Frozen evaluation truth, release-threshold decisions, or silently replacing failed baseline evidence.
 
 ### `RELEASE_GATES.md`
 **Purpose:** Defines the evidence required before advancing phases/releases.
