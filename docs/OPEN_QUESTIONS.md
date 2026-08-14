@@ -22,27 +22,34 @@ The human owner selected **outpatient evaluation/management for psychiatric medi
 
 ### CPT development/product licensing path — RESOLVED
 
-The human owner explicitly decided that ClaimLens will use the AMA CPT Developer Program as the authorized development/testing access path for CPT-dependent work and will plan to obtain the appropriate commercial/product CPT license before CPT-dependent functionality is distributed commercially.
+The human owner explicitly decided that ClaimLens will use the AMA CPT Developer Program as the intended authorized development/testing access path for broader CPT-dependent work and will plan to obtain the appropriate commercial/product CPT license before CPT-dependent functionality is distributed commercially.
 
-This decision is recorded in `docs/DECISIONS.md`. It does not assert that Developer Program enrollment, CPT portal access, a development agreement, or a commercial/product CPT license has already been completed or obtained.
+### Public AMA source use for the first narrow rule — RESOLVED
 
-### AMA CPT Developer Program enrollment/access — CURRENT EXTERNAL BLOCKER
+The human owner explicitly directed ClaimLens to continue Phase 2 using a narrowly paraphrased proposition that the AMA publishes openly, without copying the CPT dataset, full MDM grid, CPT descriptors, or comprehensive code/time tables.
 
-The product-policy decision is complete, but the required external access step is not verified. The human owner must register/enroll ClaimLens through the AMA CPT Developer Program, obtain the applicable development access/agreement, and review the governing terms before restricted CPT detail is used in development.
+The first implemented proposition is recorded in `rules/OUTPATIENT_EM_MEDICATION_MANAGEMENT.md`. This removes AMA Developer Program enrollment as a blocker for the **first narrow Gate 2 rule implementation**. It does not eliminate AMA copyright, future access requirements, or commercial product-licensing obligations.
 
-Until that external step is verified:
+### Current Phase 2 completion boundary — VERIFICATION PENDING, NOT A HUMAN POLICY QUESTION
 
-- ClaimLens may continue public-authority source review, source/version metadata work, schema readiness review, generic rule-engine work, and tests that do not reproduce restricted CPT content.
-- ClaimLens must not copy or reconstruct CPT descriptors, detailed MDM tables, code-level time thresholds, or other licensed CPT content in Git.
-- An agent must not substitute a blog, AI summary, payer summary, remembered coding rule, or inferred approximation for CPT authority.
-- The current CMS E/M material may support Medicare-specific propositions, but those propositions must not be silently generalized into universal base CPT rules.
+The first source-verified outpatient E/M pathway, synthetic cases, and focused tests are implemented. Gate 2 remains open until the new focused tests and the full applicable unit suite are run on current `main` and their individual results are inspected.
+
+This is a verification checkpoint rather than an unresolved product/billing decision. Do not start Phase 3 until verification is green and Gate 2 is formally evaluated.
+
+## Non-blocking CPT access/licensing follow-up
+
+AMA CPT Developer Program enrollment/access remains required for broader CPT-dependent development when the needed authoritative detail is not available under the narrow public-source boundary above. The planned commercial/product license remains required before commercial CPT-dependent distribution.
+
+Until an applicable AMA agreement is obtained and reviewed:
+
+- Do not copy or reconstruct the full CPT dataset, detailed MDM grid, CPT descriptors, or comprehensive code/time tables in Git.
+- Do not substitute blogs, AI summaries, payer summaries, remembered coding rules, or inferred approximations for CPT authority.
+- Do not treat CMS Medicare-specific propositions as universal base CPT rules.
 - Any executed AMA agreement controls actual permissions for CPT access, storage, transformation, display, distribution, and AI use; repository summaries do not override it.
-
-The planned commercial/product license remains a future distribution requirement. It is not claimed as obtained and does not need to be completed before authorized development/testing begins if the applicable AMA development agreement permits that work.
 
 ## Later-phase questions
 
-These remain important but do not block currently authorized Phase 2 preparation unless explicitly made current.
+These remain important but do not block currently authorized Phase 2 work unless explicitly made current.
 
 ### Payer
 
