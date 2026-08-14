@@ -1,0 +1,54 @@
+{
+  "service_family": "OUTPATIENT_EM_MEDICATION_MANAGEMENT",
+  "rule_id": "OUTPATIENT_EM_ESTABLISHED_99214_STABLE_CHRONIC_MEDICATION_PATHWAY",
+  "source_note": "Synthetic development data only. These cases exercise one narrow public-AMA rule pathway and are not frozen evaluation data.",
+  "cases": [
+    {
+      "case_id": "P2-EM-001",
+      "provider_class": "PMHNP_NP",
+      "patient_status": "ESTABLISHED",
+      "place_of_service": "office",
+      "conditions": [
+        {"name": "condition-alpha", "status_state": "PRESENT", "status_value": "stable_chronic"},
+        {"name": "condition-beta", "status_state": "PRESENT", "status_value": "stable_chronic"}
+      ],
+      "medication": {"name": "medication-alpha", "action": "continue"},
+      "expected_outcome": "SUPPORTED"
+    },
+    {
+      "case_id": "P2-EM-002",
+      "provider_class": "PSYCHIATRIST",
+      "patient_status": "ESTABLISHED",
+      "place_of_service": "outpatient",
+      "conditions": [
+        {"name": "condition-alpha", "status_state": "PRESENT", "status_value": "stable_chronic"}
+      ],
+      "medication": {"name": "medication-alpha", "action": "continue"},
+      "expected_outcome": "UNSUPPORTED"
+    },
+    {
+      "case_id": "P2-EM-003",
+      "provider_class": "PMHNP_NP",
+      "patient_status": "ESTABLISHED",
+      "place_of_service": "office",
+      "conditions": [
+        {"name": "condition-alpha", "status_state": "PRESENT", "status_value": "stable_chronic"},
+        {"name": "condition-beta", "status_state": "AMBIGUOUS", "status_value": "stable_chronic"}
+      ],
+      "medication": {"name": "medication-alpha", "action": "continue"},
+      "expected_outcome": "REVIEW"
+    },
+    {
+      "case_id": "P2-EM-004",
+      "provider_class": "PSYCHIATRIST",
+      "patient_status": "NEW",
+      "place_of_service": "office",
+      "conditions": [
+        {"name": "condition-alpha", "status_state": "PRESENT", "status_value": "stable_chronic"},
+        {"name": "condition-beta", "status_state": "PRESENT", "status_value": "stable_chronic"}
+      ],
+      "medication": {"name": "medication-alpha", "action": "continue"},
+      "expected_outcome": "NOT_APPLICABLE"
+    }
+  ]
+}
