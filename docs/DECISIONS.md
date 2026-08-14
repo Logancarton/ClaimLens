@@ -99,3 +99,11 @@ The human owner explicitly selected **outpatient evaluation/management for psych
 This selects the order of implementation within the already-approved v0.1 billing scope; it does not remove psychiatric diagnostic evaluation or psychotherapy/add-ons from the v0.1 benchmark.
 
 The first rule work must use authoritative primary sources and keep base E/M coding logic separate from later payer-specific overlays. Detailed CPT code descriptors, MDM tables, time thresholds, or other restricted CPT content must not be copied into the repository unless ClaimLens has the right to store/use that content. Public source references and independently implemented deterministic logic must remain traceable to their authority.
+
+## 2026-08-13 — AMA CPT Developer Program is the selected development-access path
+
+The human owner explicitly decided that ClaimLens will use the **AMA CPT Developer Program** as the authorized development/testing access path for CPT-dependent work and will plan to obtain the appropriate commercial/product CPT license before CPT-dependent functionality is distributed commercially.
+
+This decision does **not** mean ClaimLens has already enrolled in the Developer Program, obtained CPT portal access, executed a development license, or obtained a commercial/product CPT license. Actual permissions are controlled by the applicable executed AMA agreement.
+
+Until enrollment/access and the governing terms are verified, ClaimLens must continue to avoid committing restricted CPT descriptors, detailed MDM tables, code-level time thresholds, or other licensed CPT content to the repository. The licensing-path decision removes the product-policy question; it does not remove the external access/contract boundary.
