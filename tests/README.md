@@ -22,6 +22,8 @@ Current Phase 2 rule-engine questions include:
 
 The current Phase 2 tests intentionally exercise generic deterministic rule mechanics. They do **not** encode restricted CPT descriptors, the detailed MDM table, or code-level time thresholds while the authoritative CPT source/licensing path remains unresolved.
 
+Latest local verification checkpoint (2026-08-13): after pulling `main` through `da1a9d3`, the full suite ran 29 tests and all 29 passed, including all seven generic Phase 2 rule-engine contract tests.
+
 Run the applicable suite from the repository root in PowerShell:
 
 ```powershell
