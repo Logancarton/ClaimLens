@@ -13,13 +13,14 @@ This folder is the project truth layer. Read documents in this order before majo
 9. `BILLING_SCOPE.md` — billing territory currently supported.
 10. `RULE_GOVERNANCE.md` — how billing rules become trusted executable knowledge.
 11. `BENCHMARK_PLAN.md` — how correctness will be measured.
-12. `RELEASE_GATES.md` — evidence required to advance phases.
-13. `RISK_REGISTER.md` — known technical/product/commercial risks.
-14. `SECURITY_AND_DATA.md` — data handling and PHI boundaries.
-15. `IMPLEMENTATION_STATUS.md` — what is actually built and verified.
-16. `DECISIONS.md` — settled architectural/product decisions.
-17. `OPEN_QUESTIONS.md` — unresolved questions that must not be silently assumed.
-18. `FILE_MAP.md` — master maintenance key: where work belongs, what each file means, and which companion files must be checked/updated when something changes.
+12. `BASELINE_RESULTS.md` — recorded development/model baselines and observed failure modes; not a substitute for frozen evaluation evidence.
+13. `RELEASE_GATES.md` — evidence required to advance phases.
+14. `RISK_REGISTER.md` — known technical/product/commercial risks.
+15. `SECURITY_AND_DATA.md` — data handling and PHI boundaries.
+16. `IMPLEMENTATION_STATUS.md` — what is actually built and verified.
+17. `DECISIONS.md` — settled architectural/product decisions.
+18. `OPEN_QUESTIONS.md` — unresolved questions that must not be silently assumed.
+19. `FILE_MAP.md` — master maintenance key: where work belongs, what each file means, and which companion files must be checked/updated when something changes.
 
 Use `FILE_MAP.md` during implementation and again before completion. Its change matrix is the authoritative guide for identifying the materially affected file set that must be synchronized.
 
