@@ -85,9 +85,3 @@ The human owner explicitly requested completion of the Phase 0 freeze. With the 
 The first Phase 1 model-backed evidence-extraction baseline will use `google/medgemma-1.5-4b-it`.
 
 The model is evaluated only as an evidence interpreter behind the frozen ClaimLens extractor interface. It does not become billing authority, define the evidence schema, or replace deterministic rules. Runtime/transport remains a separate implementation decision because it may introduce dependencies, model-access terms, deployment behavior, or external-service assumptions.
-
-## 2026-08-13 — Ollama is the local Phase 1 MedGemma runtime
-
-The first MedGemma baseline uses Ollama's local API with Ollama model name `medgemma1.5`.
-
-The adapter stays behind ClaimLens' frozen evidence interface, requires structured output with exact source provenance, and fails closed when model output cannot be traced to the supplied encounter. This decision does not authorize production PHI use or make model output billing authority.
