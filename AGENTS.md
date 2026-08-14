@@ -37,6 +37,23 @@ Before architecture, implementation, debugging, or autonomous continuation work:
 - A task is not complete until every materially affected repository file has been synchronized.
 - Never leave stale paths, names, examples, comments, tests, fixtures, documentation, issue text, or project-truth references that contradict the completed change.
 
+## Required verification checkpoints
+
+Testing is a multi-step completion boundary, not a single command near the end of a task. Use every applicable checkpoint in order:
+
+1. **Baseline / reproduction** — before changing behavior, reproduce the defect or establish the current known-answer result when practical.
+2. **Focused verification** — after the smallest systemic change, run the tests that directly exercise the changed behavior and its safety boundaries.
+3. **Broader suite** — before calling implementation complete, run the full applicable unit/integration suite for the affected repository area.
+4. **Real runtime verification** — when behavior depends on a model, local runtime, external service, or environment the agent cannot faithfully simulate, run the real required path before claiming that behavior is Verified.
+5. **Result inspection** — compare against the recorded baseline and inspect per-case/failure details, not only an aggregate pass/fail number.
+6. **Repository synchronization** — only after required verification is green, update baseline/status/gate evidence, tracked issue/PR state, and every affected companion file identified by `docs/FILE_MAP.md`.
+
+If the agent cannot execute a required checkpoint, the state is **implemented; verification pending**. The agent must not mark the component Verified, close the tracked issue, declare the release gate satisfied, or begin work that depends on that gate.
+
+When a human supplies the required local test/runtime output, treat that output as verification evidence and resume the same workflow immediately. Do not stop after saying the tests passed: record the result, evaluate the active gate, synchronize affected project-truth files and issue/PR state, perform the stale-reference/final-diff sweep, and finish the current task cleanly.
+
+A failed checkpoint returns the workflow to failure analysis within the current phase. Preserve failed experiments and prior baseline results; never rewrite prior evidence merely because a later iteration passes.
+
 ## Completion synchronization rule
 
 At the end of every command/task, use the change matrix in `docs/FILE_MAP.md` to identify the materially affected file set, then perform a repository-wide affected-file sweep before declaring completion.
@@ -60,6 +77,6 @@ Before finishing, search the repository for old names, paths, interfaces, or ass
 
 ## Work order
 
-Resolve current phase/gate → select an eligible unblocked issue → inspect → identify owner → consult `docs/FILE_MAP.md` for affected companions → define expected behavior → establish baseline/test → implement smallest systemic change → run focused tests → run broader verification → review for drift → synchronize every affected repository file → search for stale references → review final diff/status → update tracked issue/PR state if applicable → commit/push only coherent verified work.
+Resolve current phase/gate → select an eligible unblocked issue → inspect → identify owner → consult `docs/FILE_MAP.md` for affected companions → define expected behavior → establish baseline/reproduction → implement smallest systemic change → run focused verification → run broader applicable suite → run required real runtime/model/integration verification → compare results with prior evidence → review for drift → synchronize every affected repository file → search for stale references → review final diff/status → update tracked issue/PR and gate state if justified → commit/push only coherent verified work.
 
 If no eligible work remains in the current phase, stop and report the exact blocker. Do not substitute work from a later phase.
