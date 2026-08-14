@@ -1,11 +1,12 @@
 # Outpatient E/M Medication Management — Phase 2 Source Review
 
-Status: **Source review in progress; no detailed CPT level-selection table is activated here.**
+Status: **Source review in progress; generic rule-engine boundary verified; no detailed CPT level-selection table is activated here.**
 
 Selected service family: outpatient evaluation/management for psychiatric medication-management encounters.
 
 Human selection date: 2026-08-13.
 Source verification date: 2026-08-13.
+Generic rule-engine verification date: 2026-08-13.
 
 ## Purpose
 
@@ -43,11 +44,29 @@ Source propositions relevant to later Medicare rules include:
 
 These Medicare propositions are not silently generalized into every commercial payer or Medicaid program.
 
+## Verified generic rule-engine boundary
+
+On 2026-08-13, after pulling current `main` through `da1a9d3`, the human owner ran:
+
+`$env:PYTHONPATH="src"; python -m unittest discover -s tests -v`
+
+All 29/29 tests passed, including all seven generic Phase 2 rule-engine contract tests. The verified mechanics now include:
+
+- mandatory rule/source metadata;
+- explicit `SUPPORTED`, `UNSUPPORTED`, `REVIEW`, and `NOT_APPLICABLE` outcomes;
+- source and evidence traceability;
+- provider applicability;
+- fail-closed duplicate-rule-ID conflict handling;
+- protection against using a source-verified but unimplemented rule as billing support; and
+- rejection of cross-encounter evidence.
+
+This verifies the generic rule-engine boundary only. It does not verify any actual outpatient E/M level-selection rule.
+
 ## What is authorized now
 
 Agents may:
 
-- Build generic deterministic rule-engine structures required by `docs/RULE_GOVERNANCE.md`.
+- Build or refine generic deterministic rule-engine structures required by `docs/RULE_GOVERNANCE.md`.
 - Record source/version/effective-date/verification metadata.
 - Implement and test propositions that can be supported from public authoritative material without reproducing restricted CPT content.
 - Create synthetic supported, unsupported, ambiguous, and rule-conflict cases.
@@ -65,4 +84,4 @@ Agents must not:
 
 ## Next implementation boundary
 
-The next safe Phase 2 implementation step is the generic deterministic rule engine plus public-source E/M guardrails and tests. Full code-level E/M selection remains blocked wherever it requires restricted CPT detail until the human owner confirms appropriate CPT rights/access or otherwise explicitly resolves the source/licensing path.
+The generic deterministic rule engine is now verified. The next Gate 2 step is to define and test actual outpatient E/M rule IDs from authorized authoritative source detail. Full code-level E/M selection remains blocked wherever it requires restricted CPT detail until the human owner confirms appropriate CPT rights/access or otherwise explicitly resolves the source/licensing path.
