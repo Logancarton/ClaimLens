@@ -87,15 +87,51 @@ Case results:
 
 This result materially improves on both the initial 0.2 exact-case baseline and the 0.0 prompt-v2 experiment. It also narrows the remaining measured failures to two evidence-normalization mechanisms rather than broad model unreliability.
 
-### Residual guardrail correction pending rerun
+### Residual guardrail correction verified
 
-The current correction targets only those two measured mechanisms:
+The final Phase 1 correction targeted only those two measured mechanisms:
 
 - Preserve another independently explicit current action only for a medication whose identity has already been validated by a directly supported model medication activity; require a current, non-conditional source sentence before adding the omitted action. This prevents generic phrases such as `monitor symptoms` from creating a medication identity.
 - Make deterministic source parsing the single owner of explicit `medication_list_presence` evidence after validating any model-supplied list quote. One explicit list statement therefore yields one canonical list-presence item, while separate source statements remain distinct.
 
-Focused mocked-Ollama tests cover both behaviors, conditional-action safety, and the requirement that generic non-medication action targets are not promoted. The real five-case MedGemma/Ollama baseline must be rerun before these corrections count as measured model-backed improvement.
+Focused mocked-Ollama tests cover both behaviors, conditional-action safety, and the requirement that generic non-medication action targets are not promoted.
+
+On 2026-08-13, the updated local repository was pulled through commit `a8c1377`, then the full unit suite and real five-case model-backed baseline were run from the repository root with `PYTHONPATH=src`.
+
+Unit verification:
+
+- `python -m unittest discover -s tests -v`
+- 22 tests run.
+- 22 tests passed.
+- Runtime: 0.013 seconds.
+
+Real MedGemma/Ollama verification:
+
+- `python -m claimlens.main --phase1-baseline`
+- Runtime: local Ollama API.
+- Model: `medgemma1.5`.
+- Cases: 5.
+- Total runtime: 121.844 seconds.
+- Valid output rate: 1.0.
+- Exact case rate: 1.0.
+- Review accuracy: 1.0.
+- Current medication-action precision: 1.0.
+- Current medication-action recall: 1.0.
+- Historical medication-action precision: 1.0.
+- Historical medication-action recall: 1.0.
+- Unsupported current actions: 0.
+- Missed current actions: 0.
+
+Case results:
+
+- `DEV-001`: match — `sertraline/continue`, no review.
+- `DEV-002`: match — medication-list presence preserved, generic linkage remains reviewable, no unsupported named action.
+- `DEV-003`: match — both `fluoxetine/continue` and `fluoxetine/stop` preserved, one contradiction derived, review required.
+- `DEV-004`: match — current `aripiprazole/continue` and historical `aripiprazole/increase` both preserved.
+- `DEV-005`: match — one medication-list-presence item, no medication-management action, no unnecessary review.
 
 Interpretation:
 
-The model/runtime integration works reliably enough to run the experiment, and deterministic evidence guardrails substantially improved the development baseline. Evidence extraction is still not Verified because the latest measured guarded run is 3/5 exact and the residual correction has not yet been rerun through the real model-backed path. Gate 1 remains not satisfied.
+The residual correction improved the measured guarded development result from 3/5 exact to 5/5 exact while preserving zero unsupported current actions and eliminating the remaining missed current action. The full unit suite also passes. This is sufficient behavioral evidence for the Phase 1 development baseline and verifies the AI evidence-extraction path against the current Gate 1 development cases.
+
+This does not establish production readiness, real-world generalization, or frozen v0.1 benchmark performance. Those remain later-phase questions. Prior failed and partial baseline results are intentionally preserved above rather than replaced.
