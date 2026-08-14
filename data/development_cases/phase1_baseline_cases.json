@@ -9,7 +9,7 @@
     "case_id": "DEV-002",
     "metadata": {"encounter_id":"DEV-002","workflow_stage":"PRE_SUBMIT","provider_class":"PSYCHIATRIST","patient_status":"ESTABLISHED"},
     "raw_note_text": "Mood is mostly stable. Lamotrigine 100 mg daily appears on the current medication list. We discussed that the dose could be increased in the future if depressive symptoms return. For now, continue current medications.",
-    "expected": {"current_medication_actions":[],"historical_medication_actions":[],"requires_review":true,"medication_list_presence":0,"contradictions":0}
+    "expected": {"current_medication_actions":[],"historical_medication_actions":[],"requires_review":true,"medication_list_presence":1,"contradictions":0}
   },
   {
     "case_id": "DEV-003",
