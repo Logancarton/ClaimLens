@@ -9,6 +9,8 @@ from __future__ import annotations
 import argparse
 import json
 from pathlib import Path
+import sys
+import time
 
 from .encounter import Encounter
 from .evidence import EvidenceState, TemporalScope, extract_evidence
@@ -20,8 +22,13 @@ PROMPT_PATH = ROOT / "prompts" / "extract_evidence.txt"
 OUTPUT_PATH = ROOT / "output" / "phase1_medgemma_baseline.json"
 
 
-def run_phase1_baseline() -> dict:
+def run_phase1_baseline(*, limit: int | None = None) -> dict:
     cases = json.loads(CASES_PATH.read_text(encoding="utf-8"))
+    if limit is not None:
+        if limit < 1:
+            raise ValueError("limit must be at least 1")
+        cases = cases[:limit]
+
     extractor = OllamaEvidenceExtractor.from_environment(
         extraction_prompt=PROMPT_PATH.read_text(encoding="utf-8")
     )
@@ -29,10 +36,18 @@ def run_phase1_baseline() -> dict:
     valid = exact = review_correct = 0
     current_tp = current_fp = current_fn = 0
     historical_tp = historical_fp = historical_fn = 0
+    run_started = time.perf_counter()
 
-    for case in cases:
+    for index, case in enumerate(cases, start=1):
         expected = case["expected"]
-        row = {"case_id": case["case_id"]}
+        case_id = case["case_id"]
+        row = {"case_id": case_id}
+        case_started = time.perf_counter()
+        print(
+            f"[{index}/{len(cases)}] Running {case_id}...",
+            file=sys.stderr,
+            flush=True,
+        )
         try:
             evidence = extract_evidence(Encounter.from_dict(case), extractor)
             valid += 1
@@ -46,8 +61,10 @@ def run_phase1_baseline() -> dict:
             historical_tp += len(historical & expected_historical)
             historical_fp += len(historical - expected_historical)
             historical_fn += len(expected_historical - historical)
+
             review = bool(evidence.review_reasons)
-            review_ok = review == expected["requires_review"]
+            expected_review = bool(expected["requires_review"])
+            review_ok = review == expected_review
             review_correct += int(review_ok)
             med_list = sum(
                 item.category == "medication_list_presence"
@@ -69,12 +86,40 @@ def run_phase1_baseline() -> dict:
                 {
                     "status": "ok",
                     "exact_match": case_exact,
-                    "current_actions": sorted([list(x) for x in current]),
-                    "historical_actions": sorted([list(x) for x in historical]),
+                    "duration_seconds": round(time.perf_counter() - case_started, 3),
+                    "current_actions": _sorted_pairs(current),
+                    "expected_current_actions": _sorted_pairs(expected_current),
+                    "historical_actions": _sorted_pairs(historical),
+                    "expected_historical_actions": _sorted_pairs(expected_historical),
+                    "requires_review": review,
+                    "expected_requires_review": expected_review,
+                    "medication_list_presence": med_list,
+                    "expected_medication_list_presence": expected["medication_list_presence"],
+                    "contradictions": contradictions,
+                    "expected_contradictions": expected["contradictions"],
                 }
             )
+            print(
+                f"[{index}/{len(cases)}] {case_id}: "
+                f"{'MATCH' if case_exact else 'MISMATCH'} "
+                f"({row['duration_seconds']}s)",
+                file=sys.stderr,
+                flush=True,
+            )
         except Exception as exc:
-            row.update({"status": "error", "error": f"{type(exc).__name__}: {exc}"})
+            row.update(
+                {
+                    "status": "error",
+                    "duration_seconds": round(time.perf_counter() - case_started, 3),
+                    "error": f"{type(exc).__name__}: {exc}",
+                }
+            )
+            print(
+                f"[{index}/{len(cases)}] {case_id}: ERROR "
+                f"({row['duration_seconds']}s) {row['error']}",
+                file=sys.stderr,
+                flush=True,
+            )
         rows.append(row)
 
     count = len(cases)
@@ -82,6 +127,7 @@ def run_phase1_baseline() -> dict:
         "runtime": "Ollama local API",
         "model": extractor.model,
         "cases": count,
+        "duration_seconds": round(time.perf_counter() - run_started, 3),
         "metrics": {
             "valid_output_rate": _ratio(valid, count),
             "exact_case_rate": _ratio(exact, count),
@@ -95,8 +141,14 @@ def run_phase1_baseline() -> dict:
         },
         "results": rows,
     }
-    OUTPUT_PATH.parent.mkdir(parents=True, exist_ok=True)
-    OUTPUT_PATH.write_text(json.dumps(report, indent=2) + "\n", encoding="utf-8")
+
+    output_path = (
+        OUTPUT_PATH
+        if limit is None
+        else OUTPUT_PATH.with_name(f"phase1_medgemma_baseline_limit{limit}.json")
+    )
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    output_path.write_text(json.dumps(report, indent=2) + "\n", encoding="utf-8")
     return report
 
 
@@ -116,16 +168,20 @@ def _pairs(values):
     return {(str(a).lower(), str(b).lower()) for a, b in values}
 
 
+def _sorted_pairs(values):
+    return sorted([list(value) for value in values])
+
+
 def _ratio(a, b):
-    return 0.0 if b == 0 else round(a / b, 4)
+    return None if b == 0 else round(a / b, 4)
 
 
 def _precision(tp, fp):
-    return 1.0 if tp + fp == 0 else round(tp / (tp + fp), 4)
+    return None if tp + fp == 0 else round(tp / (tp + fp), 4)
 
 
 def _recall(tp, fn):
-    return 1.0 if tp + fn == 0 else round(tp / (tp + fn), 4)
+    return None if tp + fn == 0 else round(tp / (tp + fn), 4)
 
 
 def main() -> int:
@@ -135,10 +191,15 @@ def main() -> int:
         action="store_true",
         help="Run the local MedGemma/Ollama evidence baseline.",
     )
+    parser.add_argument(
+        "--limit",
+        type=int,
+        help="Run only the first N development cases for a quick diagnostic.",
+    )
     args = parser.parse_args()
     if not args.phase1_baseline:
         parser.error("Phase 1 currently supports only --phase1-baseline")
-    print(json.dumps(run_phase1_baseline(), indent=2))
+    print(json.dumps(run_phase1_baseline(limit=args.limit), indent=2))
     return 0
 
 
