@@ -27,6 +27,14 @@ This remains a deliberately bounded outpatient psychiatric scope. It does not ex
 
 Exact code logic is not considered implemented merely because a code appears in a prompt or document. Each supported service must have validated source rules, explicit tests, and known-answer cases.
 
+## Phase 2 first rule family
+
+The human owner selected **outpatient evaluation/management for psychiatric medication-management encounters** as the first deterministic rule family to implement for Gate 2.
+
+This is an implementation-order decision inside the already-frozen v0.1 scope. Psychiatric diagnostic evaluation and psychotherapy/add-ons remain in the v0.1 benchmark and will follow their applicable release-gate sequence.
+
+Base E/M coding logic must be established from authoritative coding sources before payer-specific overlays are added. Restricted/licensed CPT content must not be copied into the repository without appropriate rights for the intended product use.
+
 ## Payer sequence
 
 1. Establish base coding/documentation logic.
