@@ -13,9 +13,9 @@
 - **Minimum v0.1 evidence schema:** frozen in `docs/DATA_MODEL.md` and implemented in `src/claimlens/evidence.py`.
 - **Selected Phase 1 model baseline:** `google/medgemma-1.5-4b-it`.
 - **Selected Phase 1 runtime:** local Ollama API using model name `medgemma1.5`.
-- **Phase 1 progress:** encounter/evidence contracts, provenance validation, temporal scope, uncertainty/review preservation, deterministic development baseline, Ollama structured-output adapter, local baseline CLI, and deterministic safety guardrails around model evidence are implemented.
-- **Phase 1 verification:** 10 focused unit tests passed before the guarded-extractor iteration. The initial and replicated model-backed runs produced 1/5 exact matches; prompt v2 then produced 0/5 exact matches while improving current-action recall to 1.0. Those results are preserved in `docs/BASELINE_RESULTS.md`. New guardrail tests and a corrected `DEV-002` medication-list expectation are committed but still require local verification.
-- **Remaining Gate 1 work:** run the updated focused tests, rerun the five-case model-backed development baseline through the guarded extractor, analyze residual failures, add missing development coverage where needed, and perform the final affected-file sweep before evaluating Gate 1 again.
+- **Phase 1 progress:** encounter/evidence contracts, provenance validation, temporal scope, uncertainty/review preservation, deterministic development baseline, Ollama structured-output adapter, local baseline CLI, deterministic safety guardrails around model evidence, and narrow residual guardrails for missed explicit current named actions plus medication-list deduplication are implemented.
+- **Phase 1 verification:** the initial and replicated model-backed runs produced 1/5 exact matches. Prompt v2 produced 0/5 exact matches while improving current-action recall to 1.0. The first guarded-extractor rerun improved to 3/5 exact matches (`exact_case_rate = 0.6`), review accuracy 0.8, current action precision/recall 1.0/0.75, historical action precision/recall 1.0/1.0, zero unsupported current actions, and one missed current action. Residual failures were limited to DEV-003 missing one independently explicit current action and DEV-005 duplicating one medication-list statement. Focused mocked-Ollama tests now cover both residual mechanisms and conditional-action safety, but the updated unit suite and real model-backed five-case rerun still require local execution.
+- **Remaining Gate 1 work:** run the updated focused/broader unit suite, rerun the five-case model-backed development baseline through the residual guardrail correction, compare against the recorded 0.6 exact-case result, analyze any remaining failures, then perform the final affected-file sweep before evaluating Gate 1 again.
 - **Allowed work:** Phase 1 guarded-extractor verification, failure analysis, prompt/extractor correction behind the frozen interface, additional synthetic development cases, focused tests, and extraction measurement.
 - **Blocked work:** Phase 2 rule-engine implementation and later-phase runtime work until Gate 1 is satisfied.
 
@@ -37,8 +37,8 @@ A component is not Verified because code exists. Verification requires explicit 
 | Benchmark framework | Designed | Phase 0 confirmed; `docs/BENCHMARK_PLAN.md` |
 | Security/data development policy | Designed | Phase 0 confirmed; `docs/SECURITY_AND_DATA.md` |
 | Encounter ingestion | Verified | `src/claimlens/encounter.py`; `tests/test_encounter.py` |
-| AI evidence extraction | Integrated | Local Ollama/MedGemma path runs end-to-end; guarded model evidence path is implemented; updated local verification pending |
-| Phase 1 development cases | Built | `data/development_cases/phase1_baseline_cases.json` updated for explicit medication-list evidence; focused rerun pending |
+| AI evidence extraction | Integrated | Local Ollama/MedGemma path runs end-to-end; guarded model evidence reached 3/5 exact on the latest measured five-case run; residual guardrail correction and focused tests are implemented, with local rerun pending |
+| Phase 1 development cases | Built | `data/development_cases/phase1_baseline_cases.json`; latest guarded model-backed run matched 3/5 cases and exposed the two residual normalization failures now targeted by focused tests |
 | Rule engine | Not Started | — |
 | Claim compiler | Not Started | — |
 | Adversarial auditor | Not Started | — |

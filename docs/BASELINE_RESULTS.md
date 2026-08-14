@@ -53,9 +53,9 @@ Prompt v2 improved current-action recall: both `continue` and `stop` were retain
 
 The v2 run also exposed a development-fixture inconsistency: `DEV-002` explicitly states that lamotrigine appears on the current medication list, while the original expected value for medication-list presence was zero. The development expectation was corrected to one; this is a development-fixture correction, not a retroactive change to frozen evaluation truth.
 
-### Current correction under test
+### Guarded extractor iteration
 
-The next Phase 1 iteration uses the same model and cases but adds deterministic evidence-layer guardrails around model output:
+The next Phase 1 iteration used the same model and cases but added deterministic evidence-layer guardrails around model output:
 
 - Canonical medication activity values are schema-constrained; status words such as `current`, `listed`, `taking`, or `medication_list_presence` cannot be accepted as medication actions.
 - A named medication activity must be directly supported by source text linking that medication to the action; otherwise the named action is removed and unresolved linkage becomes reviewable ambiguity.
@@ -65,6 +65,37 @@ The next Phase 1 iteration uses the same model and cases but adds deterministic 
 
 These are evidence-normalization/safety guardrails, not billing rules. The first baseline and failed prompt-v2 experiment remain preserved as evidence.
 
+The guarded extractor was then rerun locally on the same five development cases. Observed metrics:
+
+- Valid output rate: 1.0
+- Exact case rate: 0.6
+- Review accuracy: 0.8
+- Current medication-action precision: 1.0
+- Current medication-action recall: 0.75
+- Historical medication-action precision: 1.0
+- Historical medication-action recall: 1.0
+- Unsupported current actions: 0
+- Missed current actions: 1
+
+Case results:
+
+- `DEV-001`: match.
+- `DEV-002`: match.
+- `DEV-003`: mismatch — `fluoxetine/stop` was retained, but the independently explicit `fluoxetine/continue` action was missed, so the expected contradiction/review state was not derived.
+- `DEV-004`: match — current aripiprazole continuation and historical aripiprazole increase were both preserved.
+- `DEV-005`: mismatch — no medication-management action was emitted, but one explicit medication-list statement became two `medication_list_presence` items.
+
+This result materially improves on both the initial 0.2 exact-case baseline and the 0.0 prompt-v2 experiment. It also narrows the remaining measured failures to two evidence-normalization mechanisms rather than broad model unreliability.
+
+### Residual guardrail correction pending rerun
+
+The current correction targets only those two measured mechanisms:
+
+- Preserve independently explicit named medication actions from current, non-conditional source sentences when the model omits one, before contradiction derivation runs.
+- Deduplicate medication-list evidence by overlapping source provenance so one explicit list statement cannot become multiple evidence items while separate list statements remain distinct.
+
+Focused mocked-Ollama tests cover both behaviors plus the safety condition that conditional named actions are not promoted to current actions. The real five-case MedGemma/Ollama baseline must be rerun before these corrections count as measured model-backed improvement.
+
 Interpretation:
 
-The model/runtime integration works reliably enough to run the experiment, but raw/prompted MedGemma output is not yet reliable enough to mark evidence extraction Verified. Gate 1 remains not satisfied pending a rerun of the hybrid guarded extractor and broader Phase 1 development coverage.
+The model/runtime integration works reliably enough to run the experiment, and deterministic evidence guardrails substantially improved the development baseline. Evidence extraction is still not Verified because the latest measured guarded run is 3/5 exact and the residual correction has not yet been rerun through the real model-backed path. Gate 1 remains not satisfied.

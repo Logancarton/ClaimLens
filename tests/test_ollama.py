@@ -296,6 +296,155 @@ class OllamaEvidenceExtractorTests(unittest.TestCase):
         self.assertEqual(historical[0].medication.normalized_value, "aripiprazole")
         self.assertEqual(historical[0].activity_type.normalized_value, "increase")
 
+    def test_explicit_current_actions_are_preserved_when_model_omits_one_side(self):
+        encounter = Encounter.from_dict(
+            {
+                "metadata": {
+                    "encounter_id": "OLLAMA-TEST-CURRENT-GUARDRAIL",
+                    "workflow_stage": "PRE_SUBMIT",
+                    "provider_class": "PMHNP_NP",
+                },
+                "raw_note_text": (
+                    "Assessment: continue fluoxetine 20 mg daily. "
+                    "Plan: stop fluoxetine because of nausea and reassess at follow-up."
+                ),
+            }
+        )
+
+        def transport(url, payload, timeout):
+            content = {
+                "conditions_addressed": [],
+                "medication_activities": [
+                    {
+                        "medication": "fluoxetine",
+                        "activity_type": "stop",
+                        "state": "PRESENT",
+                        "temporal_scope": "CURRENT_ENCOUNTER",
+                        "source_quotes": [
+                            "Plan: stop fluoxetine because of nausea and reassess at follow-up."
+                        ],
+                    }
+                ],
+                "additional_items": [],
+            }
+            return {"message": {"content": json.dumps(content)}}
+
+        evidence = extract_evidence(encounter, OllamaEvidenceExtractor(transport=transport))
+        actions = {
+            (
+                activity.medication.normalized_value,
+                activity.activity_type.normalized_value,
+            )
+            for activity in evidence.medication_activities
+        }
+        self.assertEqual(
+            actions,
+            {("fluoxetine", "continue"), ("fluoxetine", "stop")},
+        )
+        self.assertEqual(
+            sum(item.state is EvidenceState.CONTRADICTORY for item in evidence.additional_items),
+            1,
+        )
+        self.assertTrue(evidence.review_reasons)
+
+    def test_conditional_named_action_is_not_promoted_by_guardrail(self):
+        encounter = Encounter.from_dict(
+            {
+                "metadata": {
+                    "encounter_id": "OLLAMA-TEST-CONDITIONAL-GUARDRAIL",
+                    "workflow_stage": "PRE_SIGN",
+                    "provider_class": "PMHNP_NP",
+                },
+                "raw_note_text": "Today we could increase fluoxetine next month if symptoms worsen.",
+            }
+        )
+
+        def transport(url, payload, timeout):
+            return {
+                "message": {
+                    "content": json.dumps(
+                        {
+                            "conditions_addressed": [],
+                            "medication_activities": [],
+                            "additional_items": [],
+                        }
+                    )
+                }
+            }
+
+        evidence = extract_evidence(encounter, OllamaEvidenceExtractor(transport=transport))
+        self.assertEqual(evidence.medication_activities, ())
+
+    def test_medication_list_presence_deduplicates_overlapping_source_quotes(self):
+        encounter = Encounter.from_dict(
+            {
+                "metadata": {
+                    "encounter_id": "OLLAMA-TEST-LIST-DEDUP",
+                    "workflow_stage": "PRE_SIGN",
+                    "provider_class": "PMHNP_NP",
+                },
+                "raw_note_text": "Current medication list: bupropion XL 150 mg daily.",
+            }
+        )
+
+        def transport(url, payload, timeout):
+            content = {
+                "conditions_addressed": [],
+                "medication_activities": [],
+                "additional_items": [
+                    {
+                        "category": "medication_list_presence",
+                        "state": "PRESENT",
+                        "normalized_value": "bupropion xl 150 mg daily",
+                        "temporal_scope": "CURRENT_ENCOUNTER",
+                        "source_quotes": [
+                            "Current medication list: bupropion XL 150 mg daily"
+                        ],
+                    }
+                ],
+            }
+            return {"message": {"content": json.dumps(content)}}
+
+        evidence = extract_evidence(encounter, OllamaEvidenceExtractor(transport=transport))
+        self.assertEqual(
+            sum(item.category == "medication_list_presence" for item in evidence.additional_items),
+            1,
+        )
+
+    def test_separate_medication_list_statements_remain_separate(self):
+        encounter = Encounter.from_dict(
+            {
+                "metadata": {
+                    "encounter_id": "OLLAMA-TEST-LIST-SEPARATE",
+                    "workflow_stage": "PRE_SIGN",
+                    "provider_class": "PMHNP_NP",
+                },
+                "raw_note_text": (
+                    "Current medication list: bupropion XL 150 mg daily. "
+                    "Current medication list: buspirone 10 mg twice daily."
+                ),
+            }
+        )
+
+        def transport(url, payload, timeout):
+            return {
+                "message": {
+                    "content": json.dumps(
+                        {
+                            "conditions_addressed": [],
+                            "medication_activities": [],
+                            "additional_items": [],
+                        }
+                    )
+                }
+            }
+
+        evidence = extract_evidence(encounter, OllamaEvidenceExtractor(transport=transport))
+        self.assertEqual(
+            sum(item.category == "medication_list_presence" for item in evidence.additional_items),
+            2,
+        )
+
     def test_untraceable_model_quote_fails_closed(self):
         def transport(url, payload, timeout):
             content = {

@@ -75,6 +75,64 @@ _HISTORICAL_CHANGE_RE = re.compile(
     re.IGNORECASE,
 )
 
+_EXPLICIT_NAMED_ACTION_RE = re.compile(
+    r"\b(?P<action>start|started|begin|began|initiate|initiated|stop|stopped|"
+    r"discontinue|discontinued|continue|continued|continuing|restart|restarted|"
+    r"resume|resumed|increase|increased|decrease|decreased|reduce|reduced|lower|"
+    r"lowered|raise|raised|prescribe|prescribed|monitor|monitored|monitoring)\s+"
+    r"(?:the\s+)?(?:taking\s+)?(?P<medication>[A-Za-z][A-Za-z0-9-]*)\b",
+    re.IGNORECASE,
+)
+
+_ACTION_NORMALIZATION = {
+    "start": "start",
+    "started": "start",
+    "begin": "start",
+    "began": "start",
+    "initiate": "start",
+    "initiated": "start",
+    "stop": "stop",
+    "stopped": "stop",
+    "discontinue": "stop",
+    "discontinued": "stop",
+    "continue": "continue",
+    "continued": "continue",
+    "continuing": "continue",
+    "restart": "restart",
+    "restarted": "restart",
+    "resume": "restart",
+    "resumed": "restart",
+    "increase": "increase",
+    "increased": "increase",
+    "decrease": "decrease",
+    "decreased": "decrease",
+    "reduce": "reduce",
+    "reduced": "reduce",
+    "lower": "lower",
+    "lowered": "lower",
+    "raise": "raise",
+    "raised": "raise",
+    "prescribe": "prescribe",
+    "prescribed": "prescribe",
+    "monitor": "monitor",
+    "monitored": "monitor",
+    "monitoring": "monitor",
+}
+
+_FUTURE_OR_CONDITIONAL_RE = re.compile(
+    r"\b(could|may|might|consider|considering|future|if|would)\b",
+    re.IGNORECASE,
+)
+
+_NON_MEDICATION_ACTION_TARGETS = {
+    "all",
+    "current",
+    "dose",
+    "medication",
+    "medications",
+    "the",
+}
+
 SCHEMA: dict[str, Any] = {
     "type": "object",
     "properties": {
@@ -378,6 +436,41 @@ def _append_source_guardrails(
                 ),
             )
 
+        if (
+            temporal is TemporalScope.CURRENT_ENCOUNTER
+            and not _FUTURE_OR_CONDITIONAL_RE.search(clean)
+        ):
+            for match in _EXPLICIT_NAMED_ACTION_RE.finditer(clean):
+                medication = match.group("medication").lower()
+                if medication in _NON_MEDICATION_ACTION_TARGETS:
+                    continue
+                action = _ACTION_NORMALIZATION[match.group("action").lower()]
+                if _has_medication_activity(
+                    activities,
+                    medication=medication,
+                    action=action,
+                    temporal_scope=TemporalScope.CURRENT_ENCOUNTER,
+                ):
+                    continue
+                activities.append(
+                    MedicationActivity(
+                        medication=EvidenceItem(
+                            category="medication",
+                            state=EvidenceState.PRESENT,
+                            normalized_value=medication,
+                            temporal_scope=TemporalScope.CURRENT_ENCOUNTER,
+                            provenance=(provenance,),
+                        ),
+                        activity_type=EvidenceItem(
+                            category="medication_activity_type",
+                            state=EvidenceState.PRESENT,
+                            normalized_value=action,
+                            temporal_scope=TemporalScope.CURRENT_ENCOUNTER,
+                            provenance=(provenance,),
+                        ),
+                    )
+                )
+
         if not _has_historical_cue(clean):
             continue
         historical_match = _HISTORICAL_CHANGE_RE.search(clean)
@@ -392,12 +485,11 @@ def _append_source_guardrails(
             "raised": "raise",
         }[action.lower()]
         medication = medication.lower()
-        if any(
-            item.medication is not None
-            and str(item.medication.normalized_value).lower() == medication
-            and str(item.activity_type.normalized_value).lower() == normalized_action
-            and item.activity_type.temporal_scope is TemporalScope.HISTORICAL
-            for item in activities
+        if _has_medication_activity(
+            activities,
+            medication=medication,
+            action=normalized_action,
+            temporal_scope=TemporalScope.HISTORICAL,
         ):
             continue
         activities.append(
@@ -418,6 +510,22 @@ def _append_source_guardrails(
                 ),
             )
         )
+
+
+def _has_medication_activity(
+    activities: list[MedicationActivity],
+    *,
+    medication: str,
+    action: str,
+    temporal_scope: TemporalScope,
+) -> bool:
+    return any(
+        item.medication is not None
+        and str(item.medication.normalized_value).lower() == medication
+        and str(item.activity_type.normalized_value).lower() == action
+        and item.activity_type.temporal_scope is temporal_scope
+        for item in activities
+    )
 
 
 def _append_derived_medication_contradictions(
@@ -462,6 +570,14 @@ def _append_unique_additional(
     additional_items: list[EvidenceItem],
     candidate: EvidenceItem,
 ) -> None:
+    if candidate.category == "medication_list_presence" and any(
+        item.category == candidate.category
+        and item.state is candidate.state
+        and _provenance_overlaps(item.provenance, candidate.provenance)
+        for item in additional_items
+    ):
+        return
+
     candidate_quotes = tuple(source.quote for source in candidate.provenance)
     if any(
         item.category == candidate.category
@@ -471,6 +587,31 @@ def _append_unique_additional(
     ):
         return
     additional_items.append(candidate)
+
+
+def _provenance_overlaps(
+    left: tuple[SourceProvenance, ...],
+    right: tuple[SourceProvenance, ...],
+) -> bool:
+    for left_source in left:
+        for right_source in right:
+            if left_source.encounter_id != right_source.encounter_id:
+                continue
+            if left_source.field_name != right_source.field_name:
+                continue
+            if (
+                left_source.start_char is None
+                or left_source.end_char is None
+                or right_source.start_char is None
+                or right_source.end_char is None
+            ):
+                continue
+            if (
+                left_source.start_char < right_source.end_char
+                and right_source.start_char < left_source.end_char
+            ):
+                return True
+    return False
 
 
 def _sentence_spans(text: str):
