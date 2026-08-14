@@ -78,6 +78,10 @@ Minimum fields:
 - Rationale or decision context when documented.
 - Evidence provenance.
 
+For the Phase 1 model-backed transport, medication activity is constrained to canonical action labels consistent with those meanings. Directional dose changes may normalize to `increase`, `decrease`, `reduce`, `lower`, or `raise`; `restart`, `dose_change`, `prescribe`, `monitor`, `adverse_effect_discussion`, `adherence_discussion`, and `other_management` are also valid normalized actions. Status/list words such as `current`, `listed`, `taking`, `present`, or `medication_list_presence` are not medication-management actions.
+
+Medication-list presence is evidence of medication status/listing, not proof of current medication management. Generic language such as “continue current medications” does not by itself establish which named medication was continued; unresolved linkage remains explicit ambiguity rather than a fabricated named action.
+
 ### EvaluationManagementEvidence
 Container for facts relevant to outpatient E/M evaluation without deciding an E/M level.
 
@@ -98,7 +102,7 @@ Minimum fields, each using the shared evidence contract where applicable:
 
 - Reason for evaluation / chief complaint.
 - Referral source when documented.
-- History of present illness / current symptoms.
+- History present illness / current symptoms.
 - Past psychiatric history.
 - Significant medical history.
 - Current medications.
