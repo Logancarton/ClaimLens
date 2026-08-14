@@ -20,13 +20,20 @@ None. Gate 1 is satisfied. The MedGemma/Ollama evidence-extraction baseline is v
 
 The human owner selected **outpatient evaluation/management for psychiatric medication-management encounters** as the first Gate 2 deterministic rule family. The decision is recorded in `docs/DECISIONS.md`.
 
-### Detailed CPT E/M rule source / licensing — BLOCKING FOR RESTRICTED CPT DETAIL
+### CPT development/product licensing path — BLOCKING FOR RESTRICTED CPT DETAIL
 
-The current authoritative-source review confirms that outpatient E/M level selection ultimately depends on the AMA CPT E/M guidelines. CMS's May 2026 `MLN006764 — Evaluation and Management Services` provides current Medicare guidance but explicitly directs users to the AMA E/M Services Guidelines for the detailed MDM breakdown.
+Current AMA materials identify a CPT Developer Program that offers new organizations royalty-free CPT access for building and testing innovations. Separate AMA licensing guidance states that electronic products that use or rely on CPT content require an appropriate license for the actual product/use case, and new AI products should submit a licensing application so the AMA can determine the appropriate licensing approach.
 
-ClaimLens may continue Phase 2 work that uses public authoritative propositions, source metadata, generic rule-engine infrastructure, and tests. It must **not** copy or embed restricted CPT descriptors, detailed MDM tables, code-level time thresholds, or other licensed CPT content unless the human owner confirms that ClaimLens has appropriate rights/access for the intended product use.
+Human decision required:
 
-This does not authorize an agent to replace CPT authority with a blog, AI summary, payer summary, remembered coding rule, or inferred approximation.
+- Should ClaimLens use the AMA CPT Developer Program as the authorized development-access path and plan to obtain the appropriate product/distribution license before commercial CPT-dependent use?
+
+Until explicitly resolved:
+
+- ClaimLens may continue public-authority propositions, source metadata, generic rule-engine work, and tests that do not reproduce restricted CPT content.
+- ClaimLens must not copy or reconstruct CPT descriptors, detailed MDM tables, code-level time thresholds, or other licensed CPT content in Git.
+- An agent must not substitute a blog, AI summary, payer summary, remembered coding rule, or inferred approximation for CPT authority.
+- Any later executed AMA agreement controls the actual permissions for CPT access, storage, transformation, display, distribution, and AI use; repository summaries do not override it.
 
 ## Later-phase questions
 
