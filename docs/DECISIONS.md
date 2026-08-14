@@ -91,3 +91,11 @@ The model is evaluated only as an evidence interpreter behind the frozen ClaimLe
 The first MedGemma baseline uses Ollama's local API with Ollama model name `medgemma1.5`.
 
 The adapter stays behind ClaimLens' frozen evidence interface, requires structured output with exact source provenance, and fails closed when model output cannot be traced to the supplied encounter. This decision does not authorize production PHI use or make model output billing authority.
+
+## 2026-08-13 — Outpatient E/M medication management is the first Phase 2 rule family
+
+The human owner explicitly selected **outpatient evaluation/management for psychiatric medication-management encounters** as the first service family for the Gate 2 deterministic rule baseline.
+
+This selects the order of implementation within the already-approved v0.1 billing scope; it does not remove psychiatric diagnostic evaluation or psychotherapy/add-ons from the v0.1 benchmark.
+
+The first rule work must use authoritative primary sources and keep base E/M coding logic separate from later payer-specific overlays. Detailed CPT code descriptors, MDM tables, time thresholds, or other restricted CPT content must not be copied into the repository unless ClaimLens has the right to store/use that content. Public source references and independently implemented deterministic logic must remain traceable to their authority.
