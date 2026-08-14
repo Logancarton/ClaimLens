@@ -40,7 +40,7 @@ python -m unittest discover -s tests -v
 python -m claimlens.main --phase1-baseline
 ```
 
-The baseline writes `output/phase1_medgemma_baseline.json` and prints the same report to the terminal. Default local configuration is documented in `.env.example`. Gate 1 remains open until the actual MedGemma extraction baseline is run and recorded.
+The baseline writes `output/phase1_medgemma_baseline.json` and prints the same report to the terminal. Default local configuration is documented in `.env.example`. The first successful model-backed development baseline is recorded in `docs/BASELINE_RESULTS.md`; Gate 1 remains open while the measured extraction failures are corrected and re-tested.
 
 ## v0.1 finish line
 
