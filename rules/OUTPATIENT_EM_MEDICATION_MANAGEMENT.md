@@ -1,152 +1,135 @@
-# Outpatient E/M Medication Management — Phase 2 Source Review
+# Outpatient E/M Medication Management — Phase 2 Rule Source
 
-Status: **Public-authority source review and schema-readiness review complete through the current access boundary; AMA CPT Developer Program path selected; Developer Program enrollment/access pending; no detailed CPT level-selection table is activated here.**
+Status: **One narrow public-AMA outpatient E/M pathway is implemented; focused/full local verification pending. The full CPT MDM table is not reproduced or implemented.**
 
 Selected service family: outpatient evaluation/management for psychiatric medication-management encounters.
 
 Human selection date: 2026-08-13.
 Licensing-path decision date: 2026-08-13.
+Public-source implementation decision date: 2026-08-13.
 Source verification date: 2026-08-13.
 Generic rule-engine verification date: 2026-08-13.
 
 ## Purpose
 
-This file records the authoritative-source boundary for the first Gate 2 rule family before executable billing logic is added. It is not a substitute for the CPT code set and does not make model output, secondary summaries, or payer guidance into coding authority.
+This file is the human-reviewable authoritative source definition for the first Gate 2 service family. It records the exact proposition ClaimLens is allowed to implement, its limits, and the primary sources supporting it. It is not a substitute for the CPT code set and does not reproduce the detailed CPT MDM table.
 
-## Authoritative source set identified
+## Authoritative source set
 
-### American Medical Association — CPT E/M authority
+### American Medical Association — CPT authority
 
-Primary entry points reviewed:
+Primary sources used for the first implemented pathway:
 
-- CPT Evaluation and Management: https://www.ama-assn.org/practice-management/cpt/cpt-evaluation-and-management
-- CPT Evaluation and Management revisions FAQs: https://www.ama-assn.org/practice-management/cpt/cpt-evaluation-and-management-em-revisions-faqs
-- CPT Developer Program: https://www.ama-assn.org/practice-management/cpt/cpt-developer-program
-- CPT licensing FAQs: https://www.ama-assn.org/practice-management/cpt/cpt-licensing-frequently-asked-questions-faqs
+- AMA STEPS Forward, **Simplified Outpatient Documentation and Coding**, published online January 20, 2026: https://edhub.ama-assn.org/steps-forward/module/2844245
+- AMA public guidance for CPT 99214, updated January 26, 2026: https://www.ama-assn.org/practice-management/cpt/cpt-code-99214-established-patient-office-visit-30-39-minutes
+- AMA CPT Evaluation and Management overview, updated January 26, 2026: https://www.ama-assn.org/practice-management/cpt/cpt-evaluation-and-management
+- AMA CPT Evaluation and Management revisions FAQs, updated January 26, 2026: https://www.ama-assn.org/practice-management/cpt/cpt-evaluation-and-management-em-revisions-faqs
 
-The AMA is the authority for CPT coding content. Its current public E/M materials confirm the modern office/outpatient framework in which visit level may be selected using medical decision making or total practitioner/QHP time, while medically appropriate history/examination remains clinically relevant but is not itself the level-selection mechanism.
+AMA remains the CPT coding authority. The public 2026 AMA outpatient toolkit states that office/outpatient level selection may be based on MDM or total date-of-service time and that MDM uses three elements, with the overall MDM level determined by the highest two of the three elements. The same AMA toolkit and related AMA material provide a public medication-review example in which two stable chronic conditions plus medication management meet moderate MDM, and AMA's public 99214 page identifies 99214 as the established-patient office/outpatient service associated with moderate MDM.
 
-Detailed CPT code descriptors, the full MDM table, code-level time thresholds, and other restricted CPT content are copyrighted/licensed. ClaimLens must not copy restricted CPT content into Git or treat an AI/secondary paraphrase as a replacement for current CPT authority.
+ClaimLens implements only that narrow public proposition. It does not reconstruct the full MDM table from memory and does not copy CPT descriptors, the complete MDM grid, or code-level time tables into the repository.
 
-### AMA development and product licensing path — HUMAN DECISION RESOLVED
-
-The human owner explicitly decided on 2026-08-13 that ClaimLens will use the **AMA CPT Developer Program** as its authorized development/testing access path and will plan to obtain the appropriate commercial/product CPT license before CPT-dependent functionality is distributed commercially.
-
-Current official AMA materials reviewed on 2026-08-13 state that:
-
-- the CPT Developer Program is available for new organizations to access CPT content for building and testing innovations under a royalty-free development license;
-- the program requires registration/sign-up and provides developer access to current CPT content through AMA delivery tools;
-- electronic products that use, reference, display, develop against, maintain, distribute, or otherwise rely on CPT content require an appropriate license for the actual use case;
-- AI-related CPT use is governed by the applicable AMA license terms/addendum and any required product approvals;
-- the current general AMA licensing FAQ states that training or fine-tuning AI models on the CPT Standard Data File is prohibited, while retrieval-based use may be permitted only within the applicable license/product-approval terms; and
-- an executed agreement controls actual permissions and supersedes repository summaries or general FAQ language when they differ.
-
-Therefore:
-
-- The **policy choice is settled**: ClaimLens will use the Developer Program for authorized build/test access.
-- The **external access step is not verified**: this repository does not claim that ClaimLens has enrolled, obtained portal access, executed a development agreement, or obtained a commercial/product CPT license.
-- A development license must not be treated as automatic authorization for commercial distribution, every AI use case, public/open-model ingestion, or repository storage of licensed CPT detail.
-- The commercial/product license remains a required future distribution step and is not claimed as obtained.
-
-### Centers for Medicare & Medicaid Services — current Medicare E/M guidance
+### Centers for Medicare & Medicaid Services — Medicare-specific context
 
 Primary source reviewed:
 
 - CMS `MLN006764 — Evaluation and Management Services`, May 2026: https://www.cms.gov/files/document/mln006764-evaluation-management-services.pdf
-- CMS E/M guidance landing page: https://www.cms.gov/medicare/payment/fee-schedules/physician/evaluation-management-visits
+- CMS E/M landing page: https://www.cms.gov/medicare/payment/fee-schedules/physician/evaluation-management-visits
 
-Public CMS propositions relevant to later Medicare rules include:
+CMS material remains Medicare-specific. It may support later Medicare propositions, but it is not being used as a substitute for base CPT authority and is not silently generalized to Medicaid or commercial payers.
 
-- Office/outpatient E/M code choice depends on patient type, setting, and level of service.
-- For Medicare office/outpatient E/M, patient type is new or established based on prior professional services with the practitioner/same-specialty same-group context described by CMS.
-- For most E/M visit families, level selection uses MDM or time rather than history/exam as level selectors.
-- When time supports the E/M level, the record must document the time using a total-time or start/stop representation described by CMS.
-- Medical necessity remains a governing Medicare payment condition; a higher level should not be selected when a lower level is the appropriate medically necessary service.
-- CMS explicitly directs users to the AMA E/M Services Guidelines for the detailed MDM breakdown.
+## Implemented rule
 
-These are Medicare-specific propositions. They are not silently generalized into every commercial payer, Medicaid program, or universal base CPT rule.
+### Rule ID
 
-## Schema and architecture readiness assessment
+`OUTPATIENT_EM_ESTABLISHED_99214_STABLE_CHRONIC_MEDICATION_PATHWAY`
 
-The current ClaimLens encounter/evidence contracts can represent the public-source facts identified so far without a schema change:
+### Scope
 
-- Patient type is represented by `Encounter.metadata.patient_status` (`NEW`, `ESTABLISHED`, `UNKNOWN`).
-- Rendering provider class is represented by `Encounter.metadata.provider_class`.
-- Place/setting information can be carried by `Encounter.metadata.place_of_service` when explicitly supplied.
-- Problems addressed are represented by `EvaluationManagementEvidence.problems_addressed` / `ConditionAddressed`.
-- Data work is represented by `EvaluationManagementEvidence.data_activities` / `DataActivity`.
-- Management activity is represented by `EvaluationManagementEvidence.management_activities` / `MedicationActivity`.
-- Practitioner time is represented by `EvaluationManagementEvidence.practitioner_time_minutes`.
-- Time-documentation form is represented by `EvaluationManagementEvidence.time_documentation_type`.
-- Provenance, state, and temporal scope remain available through the shared evidence contract.
+- Service family: `OUTPATIENT_EM_MEDICATION_MANAGEMENT`.
+- Base coding jurisdiction: `CPT_BASE`.
+- Established patient only.
+- Office/outpatient setting only.
+- PMHNP/NP and psychiatrist follow the same rule path; this rule does not invent a provider-class difference.
 
-No source-justified schema extension is required at this public-source boundary. Detailed authorized CPT E/M review may later demonstrate that another fact must be represented; ClaimLens will add such a field only after the authoritative source proves the need rather than pre-encoding remembered billing logic.
+### Source-verified proposition
 
-A second architecture constraint matters: the active base rule path intentionally has no payer/program identity because payer overlays are deferred. CMS May 2026 guidance is Medicare-specific. ClaimLens therefore must **not** activate CMS-only propositions as universal base CPT rules simply because those propositions are publicly accessible. Doing so would collapse the base-rule/payer-overlay boundary defined in `docs/ARCHITECTURE.md` and `docs/BILLING_SCOPE.md`.
+The rule evaluates a deliberately narrow pathway demonstrated directly by public AMA education:
 
-This is why no payer infrastructure or Medicare-specific executable rule set is being added merely to work around the current AMA access boundary.
+1. The encounter is an established-patient office/outpatient encounter.
+2. At least two chronic conditions addressed in the current encounter are explicitly supported as stable.
+3. Current medication continuation is explicitly documented.
+4. When all three facts are supported, this specific pathway supports moderate MDM / 99214.
 
-## What can be encoded from current public authority
+The normalized value `stable_chronic` is only a compact representation of an explicitly supported condition-status fact. It is not itself an E/M level or billing conclusion.
 
-Current public sources are sufficient to define high-level guardrails and source metadata such as:
+The first implementation intentionally recognizes `continue` as the medication-management action because that is the action directly demonstrated by the public AMA medication-review example. Broader prescription-drug-management actions must be added only when the authoritative proposition supporting them is recorded and tested.
 
-- office/outpatient E/M selection depends on the appropriate patient type, setting, and service level;
-- history/exam volume is not itself the office/outpatient level-selection mechanism;
-- a time-based path requires documented time in an accepted representation;
-- Medicare medical necessity can constrain payment for an E/M level; and
-- Medicare patient-status and setting propositions are payer/program-specific.
+### Fail-closed behavior
 
-Those propositions are useful for source review and later rule challenges, but they are **not sufficient to implement a complete base outpatient E/M level-selection rule set** without the detailed current CPT E/M authority. CMS explicitly points detailed MDM interpretation back to AMA guidance, and code-level thresholds/detail remain within the CPT licensing boundary.
+- Unknown patient status → `REVIEW`.
+- Non-established patient → `NOT_APPLICABLE` for this rule.
+- Unknown office/outpatient setting → `REVIEW`.
+- Non-office/outpatient setting → `NOT_APPLICABLE`.
+- Material ambiguity, contradiction, or unclear temporal scope in condition status or medication management → `REVIEW`.
+- Fewer than two explicitly stable chronic conditions, or no qualifying current medication continuation → `UNSUPPORTED` **for this pathway only**.
+- Duplicate definitions with this same rule ID remain a rule-source conflict and the generic engine returns `REVIEW`.
 
-Accordingly, adding synthetic known-answer cases for actual outpatient E/M level selection before authorized CPT access would force ClaimLens either to invent expected answers or to reconstruct restricted detail from memory. Both are prohibited.
+An `UNSUPPORTED` result from this rule must never be interpreted as proof that 99214 is globally unsupported. Other MDM and time pathways are not yet represented by this narrow rule.
 
-## Verified generic rule-engine boundary
+## Executable implementation
 
-On 2026-08-13, after pulling current `main` through `da1a9d3`, the human owner ran:
+The governed metadata and deterministic evaluator are implemented in `src/claimlens/rules.py` through `outpatient_em_medication_management_rules()`.
+
+Synthetic development cases are stored in:
+
+`data/development_cases/phase2_outpatient_em_rule_cases.json`
+
+Focused behavior tests are stored in:
+
+`tests/test_outpatient_em_rules.py`
+
+The cases cover:
+
+- source-supported pathway;
+- explicitly unsupported narrow pathway;
+- material ambiguity routed to review;
+- non-applicability for a new patient; and
+- duplicate actual rule ID/source-conflict behavior failing closed to review.
+
+## Evidence-schema assessment
+
+No dataclass/schema extension is required for this first rule. Existing fields already carry every fact needed:
+
+- `Encounter.metadata.patient_status` for new/established/unknown status;
+- `Encounter.metadata.place_of_service` for explicit setting;
+- `ConditionAddressed.status_complexity` for explicitly supported condition-status characteristics;
+- `EvaluationManagementEvidence.problems_addressed` for current problems actually addressed;
+- `EvaluationManagementEvidence.management_activities` / `MedicationActivity` for current medication management;
+- shared evidence state, provenance, and temporal scope for fail-closed uncertainty handling.
+
+The evidence extractor is not allowed to manufacture `stable_chronic` from a diagnosis list or infer medication continuation from medication-list presence. Those facts require actual source support.
+
+## AMA development/product licensing path
+
+The human owner previously selected the AMA CPT Developer Program as ClaimLens' intended authorized development/testing path and plans to obtain the appropriate commercial/product CPT license before CPT-dependent functionality is distributed commercially.
+
+That plan remains in force. Developer Program enrollment/access and commercial/product licensing are not claimed as completed.
+
+The current Phase 2 implementation uses only a narrowly paraphrased proposition that AMA itself publishes openly in its current educational material, with source references retained. Public accessibility does not waive AMA copyright or future product-licensing requirements. ClaimLens therefore continues to avoid committing the full CPT data set, detailed MDM grid, CPT descriptors, or comprehensive code/time tables.
+
+Any executed AMA agreement controls later access, storage, transformation, display, distribution, and AI-use permissions and supersedes repository summaries where they differ.
+
+## Current verification boundary
+
+Implementation is complete enough for testing, but the new rule is not yet marked `TESTED` or `ACTIVE` and Gate 2 is not yet satisfied because the required local verification has not been supplied.
+
+Required focused verification:
+
+`$env:PYTHONPATH="src"; python -m unittest discover -s tests -p "test_outpatient_em_rules.py" -v`
+
+Required broader verification:
 
 `$env:PYTHONPATH="src"; python -m unittest discover -s tests -v`
 
-All 29/29 tests passed, including all seven generic Phase 2 rule-engine contract tests. The verified mechanics now include:
-
-- mandatory rule/source metadata;
-- explicit `SUPPORTED`, `UNSUPPORTED`, `REVIEW`, and `NOT_APPLICABLE` outcomes;
-- source and evidence traceability;
-- provider applicability;
-- fail-closed duplicate-rule-ID conflict handling;
-- protection against using a source-verified but unimplemented rule as billing support; and
-- rejection of cross-encounter evidence.
-
-This verifies the generic rule-engine boundary only. It does not verify any actual outpatient E/M level-selection rule.
-
-## What is authorized now
-
-Agents may:
-
-- Maintain the generic deterministic rule-engine structures required by `docs/RULE_GOVERNANCE.md`.
-- Record public source/version/effective-date/verification metadata.
-- Continue public-authority source review without reproducing restricted CPT content.
-- Re-check the existing evidence schema against newly authorized source detail once Developer Program access is available.
-- Prepare non-proprietary test scaffolding that does not invent actual CPT level expectations.
-- Fail closed to `REVIEW` when applicability or authoritative rule detail is unresolved.
-
-## What is not authorized yet
-
-Agents must not:
-
-- Reconstruct the detailed CPT MDM table from memory.
-- Copy CPT descriptors or code-level time thresholds into the repository without verified rights under the applicable agreement.
-- Use a payer blog, coding blog, AI answer, or model prompt as the authority for base CPT rules.
-- Infer PMHNP-versus-psychiatrist differences unless an authoritative rule establishes that provider class is material.
-- Activate Medicare-specific CMS guidance as universal base CPT logic.
-- Add payer-selection infrastructure solely to bypass the current CPT source-access boundary.
-- Treat the Developer Program decision as proof that enrollment/access or commercial licensing has already occurred.
-
-## Next implementation boundary
-
-The generic deterministic rule engine is verified, the official AMA development/licensing path is confirmed, the human owner selected that path, and the current schema is ready for the publicly identified E/M facts without extension.
-
-The next required step is external: **register/enroll ClaimLens in the AMA CPT Developer Program, obtain the applicable development access/agreement, and review the governing terms.**
-
-After that access is verified, Phase 2 can resume by reading the authorized current CPT E/M material, defining the smallest source-verified base outpatient E/M rule IDs and metadata, extending the schema only if an authoritative requirement cannot be represented, adding synthetic supported/unsupported/review/conflict cases from those verified rules, implementing deterministic evaluations, and running focused plus full verification.
-
-Gate 2 remains **NOT SATISFIED** until that actual service-family rule evidence exists and the required deterministic tests are green.
+After both are green and individual results are inspected, ClaimLens can evaluate Gate 2 against `docs/RELEASE_GATES.md`, synchronize the rule lifecycle/status/Issue #3, and only then determine whether Phase 3 may begin.
