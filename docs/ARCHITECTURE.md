@@ -24,6 +24,8 @@ Interprets unstructured clinical language and maps it into the constrained schem
 
 For v0.1, this layer may populate shared evidence states/provenance plus the E/M, psychiatric-evaluation, psychotherapy, condition, medication, and data-activity evidence structures needed by the selected benchmark scope.
 
+Model-backed extraction may be wrapped in deterministic evidence guardrails when a fact can be validated directly from source text. These guardrails may constrain canonical evidence vocabulary, reject unsupported named linkages, preserve explicit medication-list/history facts, and derive contradiction/ambiguity states from already-supported source evidence. They remain part of evidence normalization and safety; they do not become billing rules or infer undocumented clinical facts.
+
 The evidence layer must not select a billing level or convert an extraction confidence score into billing support. Historical/copied-forward material does not become current evidence merely because it is repeated; unclear temporal status remains explicit.
 
 ### Rule layer
