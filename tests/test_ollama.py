@@ -87,7 +87,7 @@ class OllamaEvidenceExtractorTests(unittest.TestCase):
         self.assertNotIn("current", action_schema["enum"])
         self.assertNotIn("medication_list_presence", action_schema["enum"])
 
-    def test_named_action_requires_medication_and_action_in_same_source_quote(self):
+    def test_unlinked_named_action_is_removed_and_escalated(self):
         encounter = Encounter.from_dict(
             {
                 "metadata": {
@@ -121,8 +121,15 @@ class OllamaEvidenceExtractorTests(unittest.TestCase):
             }
             return {"message": {"content": json.dumps(content)}}
 
-        with self.assertRaises(ValueError):
-            extract_evidence(encounter, OllamaEvidenceExtractor(transport=transport))
+        evidence = extract_evidence(encounter, OllamaEvidenceExtractor(transport=transport))
+        self.assertEqual(evidence.medication_activities, ())
+        self.assertTrue(evidence.review_reasons)
+        self.assertTrue(
+            any(item.category == "medication_linkage" for item in evidence.additional_items)
+        )
+        self.assertTrue(
+            any(item.category == "medication_list_presence" for item in evidence.additional_items)
+        )
 
     def test_explicit_conflicting_actions_derive_reviewable_contradiction(self):
         encounter = Encounter.from_dict(
@@ -189,6 +196,105 @@ class OllamaEvidenceExtractorTests(unittest.TestCase):
 
         evidence = extract_evidence(self.encounter, OllamaEvidenceExtractor(transport=transport))
         self.assertEqual(evidence.additional_items, ())
+
+    def test_explicit_medication_list_is_preserved_when_model_omits_it(self):
+        encounter = Encounter.from_dict(
+            {
+                "metadata": {
+                    "encounter_id": "OLLAMA-TEST-LIST",
+                    "workflow_stage": "PRE_SIGN",
+                    "provider_class": "PMHNP_NP",
+                },
+                "raw_note_text": "Current medication list: bupropion XL 150 mg daily.",
+            }
+        )
+
+        def transport(url, payload, timeout):
+            return {
+                "message": {
+                    "content": json.dumps(
+                        {
+                            "conditions_addressed": [],
+                            "medication_activities": [],
+                            "additional_items": [],
+                        }
+                    )
+                }
+            }
+
+        evidence = extract_evidence(encounter, OllamaEvidenceExtractor(transport=transport))
+        self.assertEqual(
+            sum(item.category == "medication_list_presence" for item in evidence.additional_items),
+            1,
+        )
+
+    def test_generic_continue_current_medications_is_ambiguous_even_if_model_omits_it(self):
+        encounter = Encounter.from_dict(
+            {
+                "metadata": {
+                    "encounter_id": "OLLAMA-TEST-GENERIC",
+                    "workflow_stage": "PRE_SUBMIT",
+                    "provider_class": "PSYCHIATRIST",
+                },
+                "raw_note_text": "For now, continue current medications.",
+            }
+        )
+
+        def transport(url, payload, timeout):
+            return {
+                "message": {
+                    "content": json.dumps(
+                        {
+                            "conditions_addressed": [],
+                            "medication_activities": [],
+                            "additional_items": [],
+                        }
+                    )
+                }
+            }
+
+        evidence = extract_evidence(encounter, OllamaEvidenceExtractor(transport=transport))
+        self.assertTrue(evidence.review_reasons)
+        self.assertTrue(
+            any(item.category == "medication_linkage" for item in evidence.additional_items)
+        )
+
+    def test_explicit_historical_change_is_preserved_when_model_omits_it(self):
+        encounter = Encounter.from_dict(
+            {
+                "metadata": {
+                    "encounter_id": "OLLAMA-TEST-HISTORY",
+                    "workflow_stage": "PRE_SIGN",
+                    "provider_class": "PSYCHIATRIST",
+                },
+                "raw_note_text": (
+                    "Prior-visit history copied into today's note: aripiprazole was increased "
+                    "from 5 mg to 10 mg daily at the previous appointment."
+                ),
+            }
+        )
+
+        def transport(url, payload, timeout):
+            return {
+                "message": {
+                    "content": json.dumps(
+                        {
+                            "conditions_addressed": [],
+                            "medication_activities": [],
+                            "additional_items": [],
+                        }
+                    )
+                }
+            }
+
+        evidence = extract_evidence(encounter, OllamaEvidenceExtractor(transport=transport))
+        historical = [
+            activity for activity in evidence.medication_activities
+            if activity.activity_type.temporal_scope is TemporalScope.HISTORICAL
+        ]
+        self.assertEqual(len(historical), 1)
+        self.assertEqual(historical[0].medication.normalized_value, "aripiprazole")
+        self.assertEqual(historical[0].activity_type.normalized_value, "increase")
 
     def test_untraceable_model_quote_fails_closed(self):
         def transport(url, payload, timeout):
