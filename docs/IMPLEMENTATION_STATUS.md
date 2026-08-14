@@ -14,9 +14,9 @@
 - **Selected Phase 1 model baseline:** `google/medgemma-1.5-4b-it`.
 - **Selected Phase 1 runtime:** local Ollama API using model name `medgemma1.5`.
 - **Phase 1 progress:** encounter contract, evidence schema, provenance validation, temporal scope, uncertainty/review preservation, deterministic development baseline, Ollama structured-output adapter, and a local baseline CLI are implemented.
-- **Phase 1 verification:** the existing 7 focused Phase 1 tests were green before the runtime integration; 3 new isolated Ollama-adapter tests pass for valid structured mapping, untraceable-source rejection, and malformed-output rejection. The actual MedGemma model run is still pending.
-- **Remaining Gate 1 work:** install/pull and run MedGemma through Ollama on the development machine, record the model-backed baseline metrics, perform the final affected-file sweep, and then evaluate Gate 1 from evidence.
-- **Allowed work:** Phase 1 model-backed baseline execution, failure analysis, additional synthetic development cases, focused tests, and extraction measurement.
+- **Phase 1 verification:** 10 focused unit tests passed locally. The first real MedGemma development run returned valid structured output for all 5 cases, with 1 of 5 exact expected-case matches. The measured baseline is recorded in `docs/BASELINE_RESULTS.md`.
+- **Remaining Gate 1 work:** diagnose and correct the measured extraction failures, rerun the development baseline, add missing development coverage where needed, and perform the final affected-file sweep before evaluating Gate 1 again.
+- **Allowed work:** Phase 1 failure analysis, extractor/prompt correction behind the frozen interface, additional synthetic development cases, focused tests, and extraction measurement.
 - **Blocked work:** Phase 2 rule-engine implementation and later-phase runtime work until Gate 1 is satisfied.
 
 This file is the single repository source of truth for the **current phase/gate and actual component maturity**. `docs/RELEASE_GATES.md` defines advancement requirements. GitHub issues are the work queue but do not override this state.
@@ -37,7 +37,7 @@ A component is not Verified because code exists. Verification requires explicit 
 | Benchmark framework | Designed | Phase 0 confirmed; `docs/BENCHMARK_PLAN.md` |
 | Security/data development policy | Designed | Phase 0 confirmed; `docs/SECURITY_AND_DATA.md` |
 | Encounter ingestion | Verified | `src/claimlens/encounter.py`; `tests/test_encounter.py` |
-| AI evidence extraction | Integrated | Frozen evidence interface plus local Ollama adapter are wired; real MedGemma baseline measurement remains pending |
+| AI evidence extraction | Integrated | Local Ollama/MedGemma path runs end-to-end; the first model-backed development baseline is recorded but contains material extraction failures |
 | Phase 1 development cases | Verified | `data/development_cases/phase1_baseline_cases.json`; `tests/test_evidence.py` |
 | Rule engine | Not Started | — |
 | Claim compiler | Not Started | — |
