@@ -32,14 +32,39 @@ The replicated case diagnostics showed:
 - `DEV-004`: retained current aripiprazole continuation but missed the historical aripiprazole increase.
 - `DEV-005`: correctly emitted no medication action but missed explicit medication-list presence.
 
-Case-level observations from the initial baseline:
+### Prompt v2 experiment
 
-- `DEV-001`: exact match; current sertraline continuation extracted correctly.
-- `DEV-002`: failed. The model emitted `lamotrigine/current` as a current medication action where no current dose action was expected. This is an unsupported-current-action failure around medication-list and hypothetical/future language.
-- `DEV-003`: failed. The model extracted fluoxetine continuation but missed the contradictory stop action, so contradiction/review behavior was incomplete.
-- `DEV-004`: failed. Current aripiprazole continuation was extracted, but the historical aripiprazole increase was missed.
-- `DEV-005`: failed because explicit medication-list presence was not preserved even though no current or historical medication action was emitted.
+`prompts/extract_evidence.txt` was tightened to explicitly distinguish medication-list status from medication management, preserve historical actions, retain both sides of contradictions, and represent unresolved generic linkage as ambiguity. The same five development cases were rerun with the same MedGemma/Ollama runtime.
+
+Observed v2 metrics:
+
+- Valid output rate: 1.0
+- Exact case rate: 0.0
+- Review accuracy: 0.6
+- Current medication-action precision: 0.6667
+- Current medication-action recall: 1.0
+- Historical medication-action precision: undefined (`null`)
+- Historical medication-action recall: 0.0
+- Unsupported current actions: 2
+- Missed current actions: 0
+- Total runtime: 143.37 seconds
+
+Prompt v2 improved current-action recall: both `continue` and `stop` were retained for `DEV-003`. However, prompt-only correction regressed exact-case performance and produced new status-as-action errors (`medication_list_presence` inside the medication activity field). Historical recall remained zero and review escalation did not improve. This falsifies the idea that prompt clarification alone is sufficient for the measured Phase 1 failures.
+
+The v2 run also exposed a development-fixture inconsistency: `DEV-002` explicitly states that lamotrigine appears on the current medication list, while the original expected value for medication-list presence was zero. The development expectation was corrected to one; this is a development-fixture correction, not a retroactive change to frozen evaluation truth.
+
+### Current correction under test
+
+The next Phase 1 iteration uses the same model and cases but adds deterministic evidence-layer guardrails around model output:
+
+- Canonical medication activity values are schema-constrained; status words such as `current`, `listed`, `taking`, or `medication_list_presence` cannot be accepted as medication actions.
+- A named medication activity must be directly supported by source text linking that medication to the action; otherwise the named action is removed and unresolved linkage becomes reviewable ambiguity.
+- Explicit medication-list language is preserved deterministically and model-created list evidence without explicit list language is filtered.
+- Explicit historical medication changes with historical source cues are preserved deterministically.
+- Contradiction state is derived deterministically when supported current actions conflict.
+
+These are evidence-normalization/safety guardrails, not billing rules. The first baseline and failed prompt-v2 experiment remain preserved as evidence.
 
 Interpretation:
 
-The model/runtime integration works and all five cases returned valid structured output with traceable provenance. The dominant failures are not transport/schema failures; they are semantic extraction failures involving medication-list/action separation, ambiguous linkage, contradiction capture, and historical recall. Gate 1 remains not satisfied while these known failures remain unresolved and before the Phase 1 evidence baseline demonstrates acceptable behavior across the selected evidence territory.
+The model/runtime integration works reliably enough to run the experiment, but raw/prompted MedGemma output is not yet reliable enough to mark evidence extraction Verified. Gate 1 remains not satisfied pending a rerun of the hybrid guarded extractor and broader Phase 1 development coverage.
