@@ -107,3 +107,20 @@ The human owner explicitly decided that ClaimLens will use the **AMA CPT Develop
 This decision does **not** mean ClaimLens has already enrolled in the Developer Program, obtained CPT portal access, executed a development license, or obtained a commercial/product CPT license. Actual permissions are controlled by the applicable executed AMA agreement.
 
 Until enrollment/access and the governing terms are verified, ClaimLens must continue to avoid committing restricted CPT descriptors, detailed MDM tables, code-level time thresholds, or other licensed CPT content to the repository. The licensing-path decision removes the product-policy question; it does not remove the external access/contract boundary.
+
+## 2026-08-13 — Narrow rules may use propositions AMA publishes openly without reproducing the CPT dataset
+
+After reviewing current official AMA materials, the human owner directed ClaimLens to continue Phase 2 using publicly available authoritative AMA guidance rather than treating Developer Program enrollment as a blocker for every CPT-related development step.
+
+ClaimLens may implement a **narrowly paraphrased deterministic proposition that AMA itself publishes openly**, provided that:
+
+- the exact primary AMA source is recorded and current;
+- the repository does not copy the CPT dataset, full MDM grid, CPT descriptors, or comprehensive code/time tables;
+- the rule is scoped no broader than the public proposition actually supports;
+- an unsupported result for a partial pathway is not misrepresented as global code ineligibility;
+- ambiguity and source conflicts continue to fail closed to review; and
+- the planned AMA Developer Program/commercial product licensing path remains in force for broader CPT-dependent development and commercial distribution.
+
+The first permitted implementation is the public AMA established-patient medication-review pathway recorded in `rules/OUTPATIENT_EM_MEDICATION_MANAGEMENT.md`: at least two explicitly stable chronic conditions addressed plus current medication continuation, within an established office/outpatient encounter, support the narrow moderate-MDM/99214 pathway described by the cited AMA materials.
+
+This decision is an implementation/source-use boundary, not a claim that public web access eliminates AMA copyright or product-licensing requirements.
